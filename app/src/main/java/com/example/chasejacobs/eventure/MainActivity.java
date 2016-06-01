@@ -10,6 +10,7 @@ public class MainActivity extends AppCompatActivity {
     private int luke = 5;
 
     private boolean chaseiscool = true;
+    private int luke2 = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
