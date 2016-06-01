@@ -7,6 +7,8 @@ public class MainActivity extends AppCompatActivity {
 
     private int testing = 0;
 
+    private int luke = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
