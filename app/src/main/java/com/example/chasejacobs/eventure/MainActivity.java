@@ -1,20 +1,23 @@
 package com.example.chasejacobs.eventure;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
-
-    private int testing = 0;
-
-    private int luke = 5;
-
-    private boolean chaseiscool = true;
-    private int luke2 = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+
+    public void onButtonClick(View a){
+        if (a.getId() == R.id.testNext){
+            Intent i = new Intent (MainActivity.this, createPage.class);
+            startActivity(i);
+        }
     }
 }
