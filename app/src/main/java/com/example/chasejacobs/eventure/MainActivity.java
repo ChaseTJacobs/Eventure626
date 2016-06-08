@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        yourEvents = new ArrayList<events>();
     }
 
 
@@ -47,5 +48,13 @@ public class MainActivity extends AppCompatActivity {
         event.setPeopleLimit(peopleLimit);
         event.setPeopleGoing(peopleGoing);
         event.setCatagory(catagory);
+        yourEvents.add(event);
+    }
+
+    public void unitTestAddPerson(events event){
+        event.addPersonGoing("Joe");
+        int numPeople = event.getNumPeopleGoing();
+        numPeople++;
+        event.setNumPeopleGoing(numPeople);
     }
 }
