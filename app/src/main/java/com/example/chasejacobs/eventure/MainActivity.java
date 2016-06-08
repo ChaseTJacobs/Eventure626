@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         peopleGoing.add("Luke");
         peopleGoing.add("Your mom");
         peopleGoing.add("Chuck");
-        String catagory = "Sports";
+        String category = "Sports";
 
         events event = new events();
         event.setEventName(eventName);
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         event.setNumPeopleGoing(NumPeopleGoing);
         event.setPeopleLimit(peopleLimit);
         event.setPeopleGoing(peopleGoing);
-        event.setCatagory(catagory);
+        event.setCatagory(category);
         yourEvents.add(event);
     }
 
