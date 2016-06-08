@@ -34,11 +34,15 @@ public class events {
     public void setPeopleLimit(int peopleLimit) {
         this.peopleLimit = peopleLimit;
     }
-    public void setPeopleGoing(String person){
-        peopleGoing.add(person);
+    public void setPeopleGoing(ArrayList<String> listOfPeople){
+        this.peopleGoing = listOfPeople;
     }
     public void setCatagory(String catagory) {
         this.catagory = catagory;
+    }
+
+    public void addPersonGoing(String person){
+        this.peopleGoing.add(person);
     }
 
     public String getEventName() {
