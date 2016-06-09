@@ -15,6 +15,8 @@ public class events {
     private int peopleLimit;
     private ArrayList<String> peopleGoing;
     private String category;
+    private String description;
+    private int eventID;
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
@@ -39,6 +41,12 @@ public class events {
     }
     public void setCatagory(String category) {
         this.category = category;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setEventID(int eventID) {
+        this.eventID = eventID;
     }
 
     public void addPersonGoing(String person){
@@ -68,5 +76,11 @@ public class events {
     }
     public String getCategory() {
         return category;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public int getEventID() {
+        return eventID;
     }
 }

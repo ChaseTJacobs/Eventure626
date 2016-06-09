@@ -5,23 +5,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.firebase.client.Firebase;
+
 import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<events> yourEvents;
+    private Firebase mRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         yourEvents = new ArrayList<events>();
+        Firebase.setAndroidContext(this);
     }
 
 
     public void onButtonClick(View a){
         if (a.getId() == R.id.testNext){
-            Intent i = new Intent (MainActivity.this, createPage.class);
+            Intent i = new Intent (this, createPage.class);
             startActivity(i);
         }
     }
