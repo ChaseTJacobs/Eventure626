@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.firebase.client.Firebase;
+//import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         event.setNumPeopleGoing(NumPeopleGoing);
         event.setPeopleLimit(peopleLimit);
         event.setPeopleGoing(peopleGoing);
-        event.setCatagory(category);
+        event.setCategory(category);
         yourEvents.add(event);
     }
 

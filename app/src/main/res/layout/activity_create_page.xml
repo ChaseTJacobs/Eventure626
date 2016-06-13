@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/tableLayout">
 
         <TableRow
             android:layout_width="match_parent"
@@ -27,11 +28,11 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp" />
 
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner"
-                android:layout_column="13" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         </TableRow>
 
@@ -47,14 +48,6 @@
                 android:id="@+id/eventName"
                 android:layout_column="0" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Date"
-                android:id="@+id/date"
-                android:layout_column="4"
-                android:paddingLeft="20dp" />
         </TableRow>
 
         <TableRow
@@ -62,14 +55,9 @@
             android:layout_height="match_parent">
 
             <EditText android:id="@+id/eventNameInput"
-                android:layout_column="0" />
+                android:layout_column="0"
+                android:layout_span="15" />
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/dateInput"
-                android:layout_column="4"
-                android:paddingLeft="20dp" />
         </TableRow>
 
         <TableRow
@@ -84,15 +72,6 @@
                 android:id="@+id/location"
                 android:layout_column="0" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="People Limit"
-                android:id="@+id/peopleLimit"
-                android:layout_column="4"
-                android:paddingLeft="20dp" />
-
         </TableRow>
 
         <TableRow
@@ -103,14 +82,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/locationInput"
-                android:layout_column="0" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/peopleLimitInput"
-                android:layout_column="4"
-                android:paddingLeft="20dp" />
+                android:layout_column="0"
+                android:layout_span="15" />
 
         </TableRow>
 
@@ -131,7 +104,8 @@
             android:layout_height="match_parent">
 
             <EditText android:id="@+id/timeInput"
-                android:layout_column="0" />
+                android:layout_column="0"
+                android:layout_span="15" />
 
         </TableRow>
 
@@ -151,7 +125,8 @@
             android:layout_height="match_parent">
 
             <EditText android:id="@+id/creatorNameInput"
-                android:layout_column="0" />
+                android:layout_column="0"
+                android:layout_span="15" />
         </TableRow>
 
         <TableRow
@@ -170,6 +145,19 @@
             android:layout_height="match_parent">
 
             <EditText android:id="@+id/descriptionInput"
+                android:layout_column="0"
+                android:layout_span="15" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:id="@+id/date"
                 android:layout_column="0" />
         </TableRow>
 
@@ -177,12 +165,36 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
-                android:text="Create Event"
-                android:id="@+id/createButton"
-                android:layout_column="4"
-                android:maxLength="40"
-                android:onClick="createEvent" />
+            <EditText
+                android:id="@+id/dateInput"
+                android:layout_column="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="15" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Number of People Going"
+                android:id="@+id/PeopleGoing"
+                android:layout_column="0" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/peopleLimitInput"
+                android:layout_column="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="15" />
         </TableRow>
 
         <TableRow
@@ -199,6 +211,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <Button
+                android:text="Create Event"
+                android:id="@+id/createButton"
+                android:layout_column="14"
+                android:maxLength="40"
+                android:onClick="createEvent" />
         </TableRow>
     </TableLayout>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="186dp"
+        android:spinnerMode="dropdown" />
+
 </RelativeLayout>

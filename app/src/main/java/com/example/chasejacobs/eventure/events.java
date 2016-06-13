@@ -39,7 +39,7 @@ public class events {
     public void setPeopleGoing(ArrayList<String> listOfPeople){
         this.peopleGoing = listOfPeople;
     }
-    public void setCatagory(String category) {
+    public void setCategory(String category) {
         this.category = category;
     }
     public void setDescription(String description) {
