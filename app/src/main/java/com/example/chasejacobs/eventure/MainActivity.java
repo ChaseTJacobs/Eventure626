@@ -12,14 +12,14 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<events> yourEvents;
-    private Firebase mRef;
+    //private Firebase mRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         yourEvents = new ArrayList<events>();
-        Firebase.setAndroidContext(this);
+        //Firebase.setAndroidContext(this);
     }
 
 
