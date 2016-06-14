@@ -26,7 +26,8 @@
                 android:id="@+id/homeButton"
                 android:layout_column="0"
                 android:layout_width="50dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:onClick="onButtonClickHome" />
 
         </TableRow>
 
