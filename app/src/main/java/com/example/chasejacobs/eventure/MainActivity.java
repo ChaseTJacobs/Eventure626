@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         event.setNumPeopleGoing(NumPeopleGoing);
         event.setPeopleLimit(peopleLimit);
         event.setPeopleGoing(peopleGoing);
-        event.setCatagory(category);
+        event.setCategory(category);
         yourEvents.add(event);
     }
 
