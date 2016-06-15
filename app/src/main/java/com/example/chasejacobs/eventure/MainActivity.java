@@ -4,22 +4,43 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<events> yourEvents;
-    //private Firebase mRef;
+    Firebase mRef;
+    TextView newText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        newText = (TextView)findViewById(R.id.newTest);
         yourEvents = new ArrayList<events>();
-        //Firebase.setAndroidContext(this);
+        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String text = dataSnapshot.getValue(String.class);
+                newText.setText(text);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
 
@@ -60,5 +81,15 @@ public class MainActivity extends AppCompatActivity {
         int numPeople = event.getNumPeopleGoing();
         numPeople++;
         event.setNumPeopleGoing(numPeople);
+    }
+
+    public void unitTestDatabase(View a){
+        if (a.getId() == R.id.unitTestDatabase){
+            mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("message");
+
+            myRef.setValue("Hello, World!");
+        }
     }
 }
