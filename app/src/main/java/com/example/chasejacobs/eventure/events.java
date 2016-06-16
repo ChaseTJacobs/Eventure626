@@ -10,7 +10,8 @@ public class events {
     private String eventName;
     private String creatorName;
     private String location;
-    private Date dateObject;
+    private String date;
+    private String time;
     private int numPeopleGoing;
     private int peopleLimit;
     private ArrayList<String> peopleGoing;
@@ -27,9 +28,10 @@ public class events {
     public void setLocation(String location) {
         this.location = location;
     }
-    public void setDateObject(Date dateObject) {
-        this.dateObject = dateObject;
+    public void setDate(String date) {
+        this.date = date;
     }
+    public void setTime(String time) {this.time = time;}
     public void setNumPeopleGoing(int numPeopleGoing) {
         this.numPeopleGoing = numPeopleGoing;
     }
@@ -62,9 +64,10 @@ public class events {
     public String getLocation() {
         return location;
     }
-    public Date getDateObject() {
-        return dateObject;
+    public String getDate() {
+        return date;
     }
+    public String getTime() {return time; }
     public int getNumPeopleGoing() {
         return numPeopleGoing;
     }

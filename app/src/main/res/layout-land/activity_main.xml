@@ -17,8 +17,9 @@
         android:text="Next page"
         android:id="@+id/testNext"
         android:onClick="onButtonClick"
-        android:layout_alignTop="@+id/unitTestDatabase"
-        android:layout_toStartOf="@+id/unitTestDatabase" />
+        android:layout_below="@+id/searchEvents"
+        android:layout_alignEnd="@+id/newTest"
+        android:layout_marginEnd="65dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -26,35 +27,25 @@
         android:text="Text Database"
         android:id="@+id/unitTestDatabase"
         android:nestedScrollingEnabled="false"
-        android:layout_marginBottom="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="56dp" />
+        android:layout_marginStart="31dp"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/newTest" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/newTest"
+        android:layout_marginTop="23dp"
+        android:text="NothingYet"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="82dp"
-        android:text="NothingYet" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search Local Events"
         android:id="@+id/searchEvents"
-        android:layout_above="@+id/testNext"
-        android:layout_centerHorizontal="true"
-        android:onClick="searchPage" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test Info"
-        android:id="@+id/eventInfo"
-        android:layout_above="@+id/searchEvents"
-        android:layout_centerHorizontal="true"
-        android:onClick="onButtonClickTest" />
+        android:onClick="searchPage"
+        android:layout_above="@+id/unitTestDatabase"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
