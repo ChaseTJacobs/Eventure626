@@ -51,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void searchPage(View a){
+        if (a.getId() == R.id.searchEvents){
+            Intent i = new Intent(this, SearchPage.class);
+            startActivity(i);
+        }
+    }
+
     public void unitTestReceiveGames(View a){
         String eventName = "Soccer";
         String creatorName = "Chase Jacobs";

@@ -39,4 +39,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="82dp"
         android:text="NothingYet" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search Local Events"
+        android:id="@+id/searchEvents"
+        android:layout_above="@+id/testNext"
+        android:layout_centerHorizontal="true"
+        android:onClick="searchPage" />
 </RelativeLayout>
