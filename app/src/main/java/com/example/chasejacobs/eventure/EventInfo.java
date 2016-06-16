@@ -11,6 +11,9 @@ public class EventInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_info);
         test = new events();
+        Bundle bundle = getIntent().getExtras();
+        test.setDescription(bundle.getString("description"));
+        System.out.println(test.getDescription());
     }
 
     public void displayInfoTest(){

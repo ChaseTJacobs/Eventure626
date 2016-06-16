@@ -112,13 +112,15 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
-                bundle.putString("eventName",NewEvent1.getEventName());
-                bundle.putString("category",NewEvent1.getCategory());
-                bundle.putString("peopleLimit",String.valueOf(NewEvent1.getPeopleLimit()));
-                bundle.putString("eventID",String.valueOf(NewEvent1.getEventID()));
-                bundle.putString("creatorName",NewEvent1.getCreatorName());
-                bundle.putString("location",NewEvent1.getLocation());
-                Intent i = new Intent(this, EventInfo.class);
+                bundle.putString("eventName", NewEvent1.getEventName());
+                bundle.putString("category", NewEvent1.getCategory());
+                bundle.putString("peopleLimit", String.valueOf(NewEvent1.getPeopleLimit()));
+                bundle.putString("eventID", String.valueOf(NewEvent1.getEventID()));
+                bundle.putString("creatorName", NewEvent1.getCreatorName());
+                bundle.putString("location", NewEvent1.getLocation());
+                bundle.putString("description", NewEvent1.getDescription());
+
+                Intent i = new Intent(SearchPage.this, EventInfo.class);
                 i.putExtras(bundle);
                 startActivity(i);
             }
