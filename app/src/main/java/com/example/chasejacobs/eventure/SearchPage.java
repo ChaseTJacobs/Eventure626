@@ -22,7 +22,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     String[] android_versions = {"Cupcake", "Donut", "Froyo", "Gingerbread", "Honeycomb", "Ice_Cream_Sandwich", "Jelly_Bean", "KitKat", "Lollipop"};
 
     String[] test = {"Hello",
-            "Next"}
+            "Next"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
