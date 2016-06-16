@@ -51,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void onButtonClickTest(View a){
+        if(a.getId() == R.id.eventInfo){
+            Intent i = new Intent (this, EventInfo.class);
+            startActivity(i);
+        }
+    }
+
     public void searchPage(View a){
         if (a.getId() == R.id.searchEvents){
             Intent i = new Intent(this, SearchPage.class);

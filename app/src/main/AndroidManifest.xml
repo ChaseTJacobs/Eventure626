@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".createPage" />
-        <activity android:name=".SearchPage"></activity>
+        <activity android:name=".SearchPage" />
+        <activity android:name=".EventInfo"></activity>
     </application>
 
 </manifest>
