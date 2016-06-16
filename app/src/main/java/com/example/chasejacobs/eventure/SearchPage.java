@@ -21,9 +21,6 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     private String categorySelected = new String();
     String[] android_versions = {"Cupcake", "Donut", "Froyo", "Gingerbread", "Honeycomb", "Ice_Cream_Sandwich", "Jelly_Bean", "KitKat", "Lollipop"};
 
-    String[] test = {"Hello",
-            "Next"}
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
