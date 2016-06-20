@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         yourEvents = new ArrayList<events>();
     }
-    
+
     protected void onStart(){
         super.onStart();
         newText = (TextView)findViewById(R.id.newTest);
@@ -105,9 +105,12 @@ public class MainActivity extends AppCompatActivity {
         if (a.getId() == R.id.unitTestDatabase){
             mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("message");
+            DatabaseReference myRef = database.getReference("testing");
 
-            myRef.setValue("Hello, World!");
+            newText = (TextView)findViewById(R.id.newTest);
+            String text = newText.getText().toString();
+
+            myRef.setValue(text);
         }
     }
 }
