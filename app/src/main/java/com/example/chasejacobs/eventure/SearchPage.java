@@ -127,4 +127,8 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         });
 
     }
+
+    public void sendEvent(events temp){
+        
+    }
 }
