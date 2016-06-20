@@ -26,8 +26,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        newText = (TextView)findViewById(R.id.newTest);
         yourEvents = new ArrayList<events>();
+    }
+    
+    protected void onStart(){
+        super.onStart();
+        newText = (TextView)findViewById(R.id.newTest);
         mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
