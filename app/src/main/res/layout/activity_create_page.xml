@@ -25,7 +25,8 @@
             android:onClick="onButtonClickHome"
             android:layout_span="1"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/eventNameInput" />
+            android:layout_alignStart="@+id/eventNameInput"
+            android:layout_alignEnd="@+id/description" />
 
         <Spinner
             android:id="@+id/spinner"
