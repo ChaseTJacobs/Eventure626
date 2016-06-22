@@ -3,6 +3,7 @@ package com.example.chasejacobs.eventure;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<events> yourEvents;
     Firebase mRef;
     TextView newText;
+    private static final String errorMsg = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onButtonClickTest(View a){
         if(a.getId() == R.id.eventInfo){
-            Intent i = new Intent (this, EventInfo.class);
-            startActivity(i);
+            try{
+                Intent i = new Intent (this, EventInfo.class);
+                startActivity(i);
+            }
+            catch (Exception o) {
+                Log.e(errorMsg, o.toString());
+            }
         }
     }
 
