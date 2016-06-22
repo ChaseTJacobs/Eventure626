@@ -3,6 +3,7 @@ package com.example.chasejacobs.eventure;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +27,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     String[] eventName;
     String[] eventCategory;
     ArrayAdapter<String> eventAdapter;
+    private static final String errTag = "SearchPage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +106,14 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         for (int i = 0; i < result; i++){
             eventName[i] = stuff.get(i).getEventName();
             eventCategory[i] = stuff.get(i).getCategory();
-            System.out.println(eventName[i]);
+            Log.i(errTag, eventName[i]);
         }
         eventAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,eventName);
         mainList.setAdapter(eventAdapter);
         mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(errTag, NewEvent1.getEventName());
                 Bundle bundle = new Bundle();
                 bundle.putString("eventName", NewEvent1.getEventName());
                 bundle.putString("category", NewEvent1.getCategory());
