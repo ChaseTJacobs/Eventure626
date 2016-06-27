@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +28,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
     private int dayChecker;
     private int monthChecker;
     private int yearChecker;
+    private static final String errorTag = "createPage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
         categorySelected = myText.getText().toString();
         if(!categorySelected.equals("Select Category")) {
             Toast.makeText(this, "You selected " + myText.getText(), Toast.LENGTH_SHORT).show();
+            Log.i(errorTag, myText.getText().toString());
         }
     }
 
@@ -96,6 +99,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                         dayChecker = Integer.parseInt(checkDate.substring(3, 5));
                         monthChecker = Integer.parseInt(checkDate.substring(0, 2));
                         yearChecker = Integer.parseInt(checkDate.substring(6, 10));
+                        Log.i(errorTag, checkDate);
                     } catch (NumberFormatException e) {
                         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
                         myAlert.setMessage("Please type enter a valid date!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -176,6 +180,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                     }
                                 }).create();
                                 myAlert.show();
+                                Log.e(errorTag, e.getMessage());
                             }
                         }
                         else {
