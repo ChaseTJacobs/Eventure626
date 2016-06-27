@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
         newText = (TextView)findViewById(R.id.newTest);
-        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
+        mRef = new Firebase("https://eventure-860cb.firebaseio.com/testing");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void unitTestDatabase(View a){
         if (a.getId() == R.id.unitTestDatabase){
-            mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
+            mRef = new Firebase("https://eventure-860cb.firebaseio.com//testing");
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference("testing");
 

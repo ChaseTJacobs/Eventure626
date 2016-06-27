@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "550616990194",
-    "firebase_url": "https://eventure-8fca3.firebaseio.com",
-    "project_id": "eventure-8fca3",
-    "storage_bucket": "eventure-8fca3.appspot.com"
+    "project_number": "647747751967",
+    "firebase_url": "https://eventure-860cb.firebaseio.com",
+    "project_id": "eventure-860cb",
+    "storage_bucket": "eventure-860cb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:550616990194:android:8cdb913322e8a898",
+        "mobilesdk_app_id": "1:647747751967:android:8cdb913322e8a898",
         "android_client_info": {
           "package_name": "com.example.chasejacobs.eventure"
         }
       },
       "oauth_client": [
         {
-          "client_id": "550616990194-1kbfp9doergvcnqp4mr8rk4498euj8n4.apps.googleusercontent.com",
+          "client_id": "647747751967-l2dej32269duc35p30vj08nakri9vq3k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chasejacobs.eventure",
+            "certificate_hash": "110962CBB1E12D4F29405AEC182CDFD037D66ACA"
+          }
+        },
+        {
+          "client_id": "647747751967-o2ltsisbfjgg9a1efg4jvph1ja9re9b9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBO1jVcG1UW0Zp9thrkujli1jpkrdTaVpg"
+          "current_key": "AIzaSyDQasXiAlRunl_zyklxHLcluJ67tr9sVV8"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647747751967-o2ltsisbfjgg9a1efg4jvph1ja9re9b9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
