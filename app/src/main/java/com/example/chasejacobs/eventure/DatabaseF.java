@@ -3,7 +3,9 @@ package com.example.chasejacobs.eventure;
 import com.firebase.client.Firebase;
 
 /**
- * Created by chasejacobs on 6/13/16.
+ * This class implements the Firebase database and links it into the rest of the app.
+ *
+ * @Author Chase Jacobs
  */
 public class DatabaseF extends android.app.Application{
     @Override

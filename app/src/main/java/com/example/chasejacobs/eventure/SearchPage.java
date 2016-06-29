@@ -16,6 +16,16 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity for searching.
+ *
+ * This activity is used to search Events based on user input. It will contact the server and get
+ * results that way.
+ *
+ * @author Chase Jacobs, Luke Iannucci
+ * @version 2016.1.0.0
+ * @since 1.0
+ */
 public class SearchPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     Spinner spinner;
@@ -52,6 +62,14 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         spinner.setOnItemSelectedListener(this);
     }
 
+    /**
+     *  This function will select a category from the drop down box, and notify the user which category they selected.
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         TextView myText = (TextView) view;
         categorySelected = myText.getText().toString();
