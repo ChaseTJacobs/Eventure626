@@ -22,6 +22,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+/**
+ * Activity for the main page
+ *
+ * This activity is used to display the main page and give you all the options on what to do
+ *
+ * @author Chase Jacobs, Luke Iannucci
+ * @version 2016.0.0.1
+ * @since 1.0
+ */
 public class MainActivity extends AppCompatActivity {
     ArrayList<events> yourEvents;
     Firebase mRef;
@@ -42,8 +51,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function will display the error message if you are not connected to the internet.
+     * It will give the user the option to connect and if the choose not to, it will quit the app.
+     *
+     */
     protected void createNetErrorDialog() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("You need a network connection to use this application. Please turn on mobile network or Wi-Fi in Settings.")
                 .setTitle("Unable to connect")
@@ -67,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * On the start of the app it will try and connect you to the database
+     */
     protected void onStart() {
         super.onStart();
         newText = (TextView) findViewById(R.id.newTest);
@@ -85,6 +101,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * This is the on button click that takes the user to the create an
+     * event page. It checks if you are connected to the internet before
+     * it takes you to that page.
+     *
+     * @param a
+     */
     public void onButtonClick(View a) {
         if (a.getId() == R.id.testNext) {
             connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -98,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This is the on button click that takes the user to the event info
+     * page. It makes sure you are connected to the internet before taking you there.
+     *
+     * @param a
+     */
     public void onButtonClickTest(View a) {
         if (a.getId() == R.id.eventInfo) {
             connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -115,11 +144,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This is the on button click function that will take you to the search page
+     * this also check to make sure you are connected to the internet before taking you there.
+     *
+     * @param a
+     */
     public void searchPage(View a) {
         if (a.getId() == R.id.searchEvents) {
+            connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo == null) {
-                connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                networkInfo = connMgr.getActiveNetworkInfo();
                 createNetErrorDialog();
             } else {
                 Intent i = new Intent(this, SearchPage.class);

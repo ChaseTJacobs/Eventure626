@@ -3,6 +3,15 @@ package com.example.chasejacobs.eventure;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+/**
+ * Activity for displaying a certain event
+ *
+ * This activity is used to the corresponding event that the user clicked on
+ *
+ * @author Chase Jacobs, Luke Iannucci
+ * @version 2016.0.0.1
+ * @since 1.0
+ */
 public class EventInfo extends AppCompatActivity {
     events test;
 
@@ -16,6 +25,9 @@ public class EventInfo extends AppCompatActivity {
         System.out.println(test.getDescription());
     }
 
+    /**
+     * test event data to display the info.
+     */
     public void displayInfoTest(){
         test.setPeopleLimit(10);
         test.setCreatorName("Luke");
