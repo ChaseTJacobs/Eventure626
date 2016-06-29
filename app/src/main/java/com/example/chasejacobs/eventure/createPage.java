@@ -17,6 +17,16 @@ import android.widget.Toast;
 import java.sql.Date;
 import java.util.Random;
 
+/**
+ * Activity for creating a new Event.
+ *
+ * This activity is used to create a new Event, and adding it to the database. It will ask the user
+ *  for all of the information needed in order to create a new event.
+ *
+ * @author Chase Jacobs, Luke Iannucci
+ * @version 2016.1.0.0
+ * @since 1.0
+ */
 public class createPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Spinner spinner;
@@ -74,6 +84,11 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
+    /**
+     * This function will create a new event, and validate the users input.
+     *
+     * @param a the view
+     */
     public void createEvent(View a){
         if (a.getId() == R.id.createButton){
             EditText eventName = (EditText)findViewById(R.id.eventNameInput);

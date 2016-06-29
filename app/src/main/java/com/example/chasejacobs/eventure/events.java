@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
+ * This class stores all of the info in an Event.
+ *
+ * It can also convert the individual data pieces to a JSON object
  * Created by chasejacobs on 6/6/16.
  */
 public class events {
