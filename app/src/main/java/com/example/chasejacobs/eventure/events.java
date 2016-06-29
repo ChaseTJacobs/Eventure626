@@ -3,6 +3,8 @@ package com.example.chasejacobs.eventure;
 import android.util.Log;
 
 import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -48,13 +50,9 @@ public class events {
         catch (Exception o){
             System.out.println(o);
         }
-    }
-    /*
-    public void saveToDatabase(){
-        Gson gson = new Gson();
-        YourPOJO myPOJO = gson.fromJson(jsonString, YourPOJO.class);
-    }
-    */
+
+       }
+
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
