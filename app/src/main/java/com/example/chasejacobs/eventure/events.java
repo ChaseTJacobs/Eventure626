@@ -1,5 +1,8 @@
 package com.example.chasejacobs.eventure;
 
+import android.util.Log;
+
+import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -21,7 +24,37 @@ public class events {
     private String category;
     private String description;
     private int eventID;
+    public JSONObject jsonObject = new JSONObject();
 
+    public void createJSON(){
+        try{
+            jsonObject.put("eventName", eventName);
+            jsonObject.put("creatorName", creatorName);
+            jsonObject.put("location", location);
+            jsonObject.put("date", date);
+            jsonObject.put("time", time);
+            jsonObject.put("numPeopleGoing", numPeopleGoing);
+            jsonObject.put("peopleLimit", peopleLimit);
+            JSONObject jPeopleGoing = new JSONObject();
+            int temp = peopleGoing.size();
+            for (int i = 0; i < temp; i++){
+                jPeopleGoing.put("person" + i, peopleGoing.get(i));
+            }
+            jsonObject.put("category", category);
+            jsonObject.put("description", description);
+            jsonObject.put("eventID", eventID);
+            jsonObject.put("peopleGoing", jPeopleGoing);
+        }
+        catch (Exception o){
+            System.out.println(o);
+        }
+    }
+    /*
+    public void saveToDatabase(){
+        Gson gson = new Gson();
+        YourPOJO myPOJO = gson.fromJson(jsonString, YourPOJO.class);
+    }
+    */
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
