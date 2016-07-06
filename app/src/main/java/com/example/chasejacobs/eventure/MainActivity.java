@@ -3,6 +3,7 @@ package com.example.chasejacobs.eventure;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String errorMsg = "MainActivity";
     ConnectivityManager connMgr;
     NetworkInfo networkInfo;
+    LocationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,39 @@ public class MainActivity extends AppCompatActivity {
         connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
         yourEvents = new ArrayList<events>();
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            createGPSErrorDialog();
+        }
+
         if (networkInfo == null) {
             createNetErrorDialog();
         }
+
+    }
+
+    protected void createGPSErrorDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This application needs to acces your location. Please enable your GPS location.")
+                .setTitle("Unable to find your location")
+                .setCancelable(false)
+                .setPositiveButton("Settings",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(i);
+                            }
+                        }
+                )
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                MainActivity.this.finish();
+                            }
+                        }
+                );
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     /**
