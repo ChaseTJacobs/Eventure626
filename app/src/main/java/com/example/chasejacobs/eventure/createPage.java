@@ -14,6 +14,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.sql.Date;
 import java.util.Random;
 
@@ -39,6 +43,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
     private int monthChecker;
     private int yearChecker;
     private static final String errorTag = "createPage";
+    Firebase mRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,8 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
         categories[6] = "Business";
         categories[7] = "Charity";
         categories[8] = "Other";
+
+        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/event1");
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -186,6 +193,11 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                 newEvent.setCreatorName(creatorsName.getText().toString());
                                 newEvent.setDescription(description.getText().toString());
                                 newEvent.setCategory(categorySelected);
+                                Log.i("HAPPENS","This happens, so it probably saves");
+                                mRef = new Firebase("https://eventure-8fca3.firebaseio.com/event1");
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference myRef = database.getReference("event1");
+                                newEvent.saveToDatabase(myRef);
                             } catch (NumberFormatException e) {
                                 AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
                                 myAlert.setMessage("Please type in a number for people limit!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
