@@ -1,12 +1,21 @@
 package com.example.chasejacobs.eventure;
 
+import android.*;
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,7 +46,10 @@ import java.util.ArrayList;
  * @version 2016.0.0.1
  * @since 1.0
  */
+
+
 public class MainActivity extends AppCompatActivity {
+
     ArrayList<events> yourEvents;
     Firebase mRef;
     TextView newText;
@@ -55,14 +67,14 @@ public class MainActivity extends AppCompatActivity {
         networkInfo = connMgr.getActiveNetworkInfo();
         yourEvents = new ArrayList<events>();
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             createGPSErrorDialog();
         }
-
         if (networkInfo == null) {
             createNetErrorDialog();
         }
         loadFiles();
+        getLocation();
 
     }
 
@@ -112,6 +124,20 @@ public class MainActivity extends AppCompatActivity {
                 );
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET}, 10);
+            }
+        }
+        TextView tv = (TextView) findViewById(R.id.gps);
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        MyLocListener loc = new MyLocListener();
+        Location myLoc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
+        tv.setText("Latitude: " + myLoc.getLatitude() + "\nLongitude: " + myLoc.getLongitude());
     }
 
     /**
@@ -177,6 +203,8 @@ public class MainActivity extends AppCompatActivity {
             networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo == null) {
                 createNetErrorDialog();
+            } else if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                createGPSErrorDialog();
             } else {
                 Intent i = new Intent(this, createPage.class);
                 startActivity(i);
@@ -196,6 +224,8 @@ public class MainActivity extends AppCompatActivity {
             networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo == null) {
                 createNetErrorDialog();
+            } else if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                createGPSErrorDialog();
             } else {
                 try {
                     Intent i = new Intent(this, EventInfo.class);
@@ -219,6 +249,8 @@ public class MainActivity extends AppCompatActivity {
             networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo == null) {
                 createNetErrorDialog();
+            } else if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                createGPSErrorDialog();
             } else {
                 Intent i = new Intent(this, SearchPage.class);
                 startActivity(i);
@@ -263,7 +295,11 @@ public class MainActivity extends AppCompatActivity {
             networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo == null) {
                 createNetErrorDialog();
-            } else {
+            }
+            else if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                createGPSErrorDialog();
+            }
+            else {
                 mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
                 newText = (TextView) findViewById(R.id.newTest);
                 String text = newText.getText().toString();
