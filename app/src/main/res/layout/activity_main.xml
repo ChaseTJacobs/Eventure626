@@ -57,5 +57,14 @@
         android:layout_centerHorizontal="true"
         android:onClick="onButtonClickTest" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/gps"
+        android:layout_above="@+id/eventInfo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="67dp" />
+
 
 </RelativeLayout>

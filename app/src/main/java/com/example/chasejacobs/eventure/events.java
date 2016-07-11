@@ -74,7 +74,6 @@ public class events {
 
         userRef .setValue(userMap);
      */
-
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
