@@ -5,11 +5,8 @@ import android.util.Log;
 import com.firebase.client.Firebase;
 import com.google.firebase.database.DatabaseReference;
 
-import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * This class stores all of the info in an Event.
@@ -25,55 +22,12 @@ public class events {
     private String time;
     private int numPeopleGoing;
     private int peopleLimit;
-    private ArrayList<String> peopleGoing;
+    private List<String> peopleGoing = new ArrayList<>();
     private String category;
     private String description;
     private int eventID;
 
-
-    public void saveToDatabase(DatabaseReference mRef){
-        try{
-            Map<String, JSONObject> userMap = new HashMap<String, JSONObject>();
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("eventName", eventName);
-            jsonObject.put("creatorName", creatorName);
-            jsonObject.put("location", location);
-            jsonObject.put("date", date);
-            jsonObject.put("time", time);
-            //jsonObject.put("numPeopleGoing", numPeopleGoing);
-            jsonObject.put("peopleLimit", peopleLimit);
-            /*
-            JSONObject jPeopleGoing = new JSONObject();
-            if (peopleGoing != null){
-                int temp = peopleGoing.size();
-                for (int i = 0; i < temp; i++){
-                    jPeopleGoing.put("person" + i, peopleGoing.get(i));
-                }
-            }
-            */
-            jsonObject.put("category", category);
-            jsonObject.put("description", description);
-            //jsonObject.put("eventID", eventID);
-            //jsonObject.put("peopleGoing", jPeopleGoing);
-            userMap.put(Integer.toString(eventID),jsonObject);
-            System.out.println("Saving to server now");
-            mRef.setValue(userMap);
-        }
-        catch (Exception o){
-            System.out.println(o);
-        }
-
-       }
-    /*
-            Firebase userRef = ref.child("user");
-        Map<String, JSONObject> userMap= new HashMap<String, JSONObject>();
-        JSONObject tempObject = new JSONObject();
-        tempObject.put("birthday","1992");
-        tempObject.put("fullName","Emin AYAR");
-        userMap.put("myUser", tempObject);
-
-        userRef .setValue(userMap);
-     */
+    public events(){}
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
@@ -94,7 +48,7 @@ public class events {
     public void setPeopleLimit(int peopleLimit) {
         this.peopleLimit = peopleLimit;
     }
-    public void setPeopleGoing(ArrayList<String> listOfPeople){
+    public void setPeopleGoing(List<String> listOfPeople){
         this.peopleGoing = listOfPeople;
     }
     public void setCategory(String category) {
@@ -109,6 +63,7 @@ public class events {
 
     public void addPersonGoing(String person){
         this.peopleGoing.add(person);
+        this.numPeopleGoing = this.numPeopleGoing + 1;
     }
 
     public String getEventName() {
@@ -130,7 +85,7 @@ public class events {
     public int getPeopleLimit() {
         return peopleLimit;
     }
-    public ArrayList<String> getPeopleGoing() {
+    public List<String> getPeopleGoing() {
         return peopleGoing;
     }
     public String getCategory() {

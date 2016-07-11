@@ -57,5 +57,14 @@
         android:layout_centerHorizontal="true"
         android:onClick="onButtonClickTest" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTest"
+        android:layout_below="@+id/newTest"
+        android:layout_alignEnd="@+id/eventInfo"
+        android:layout_marginTop="22dp"
+        android:text="NothingYet" />
+
 
 </RelativeLayout>

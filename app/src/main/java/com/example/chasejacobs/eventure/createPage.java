@@ -18,6 +18,9 @@ import com.firebase.client.Firebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.Random;
 
@@ -44,6 +47,8 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
     private int yearChecker;
     private static final String errorTag = "createPage";
     Firebase mRef;
+    private String filename = "yourGames";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,10 +199,19 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                 newEvent.setDescription(description.getText().toString());
                                 newEvent.setCategory(categorySelected);
                                 Log.i("HAPPENS","This happens, so it probably saves");
-                                mRef = new Firebase("https://eventure-8fca3.firebaseio.com/event1");
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference myRef = database.getReference("event1");
-                                newEvent.saveToDatabase(myRef);
+                                mRef = new Firebase("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
+                                String tempS = "https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()) + "\n";
+                                mRef.setValue(newEvent);
+                                mRef.child("peopleGoing").setValue(newEvent.getPeopleGoing());
+                                try {
+                                    FileOutputStream outputStream = openFileOutput(filename,MODE_PRIVATE);
+                                    outputStream.write(tempS.getBytes());
+                                    outputStream.close();
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                } catch(IOException o){
+                                    o.printStackTrace();
+                                }
                             } catch (NumberFormatException e) {
                                 AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
                                 myAlert.setMessage("Please type in a number for people limit!").setPositiveButton("OK", new DialogInterface.OnClickListener() {

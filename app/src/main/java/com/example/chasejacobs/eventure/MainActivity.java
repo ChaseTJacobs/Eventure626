@@ -21,6 +21,11 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -36,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<events> yourEvents;
     Firebase mRef;
     TextView newText;
+    TextView testText;
     private static final String errorMsg = "MainActivity";
     ConnectivityManager connMgr;
     NetworkInfo networkInfo;
@@ -56,7 +62,32 @@ public class MainActivity extends AppCompatActivity {
         if (networkInfo == null) {
             createNetErrorDialog();
         }
+        loadFiles();
 
+    }
+
+    protected void loadFiles(){
+        Log.i("Yes", "Load files");
+        String message = "";
+        testText = (TextView) findViewById(R.id.editTest);
+
+        try{
+            FileInputStream fileInput = openFileInput("yourGames");
+            InputStreamReader readString = new InputStreamReader(fileInput);
+            BufferedReader bReader = new BufferedReader(readString);
+            StringBuffer sBuffer = new StringBuffer();
+            while ((message=bReader.readLine()) != null){
+                sBuffer.append(message + "\n");
+            }
+            message = sBuffer.toString();
+        }
+        catch (FileNotFoundException o){
+            o.printStackTrace();
+        }
+        catch (IOException c){
+            c.printStackTrace();
+        }
+        testText.setText(message);
     }
 
     protected void createGPSErrorDialog(){
@@ -214,18 +245,18 @@ public class MainActivity extends AppCompatActivity {
         event.setLocation(location);
         event.setNumPeopleGoing(NumPeopleGoing);
         event.setPeopleLimit(peopleLimit);
-        event.setPeopleGoing(peopleGoing);
+        //event.setPeopleGoing(peopleGoing);
         event.setCategory(category);
         yourEvents.add(event);
     }
-
+    /*
     public void unitTestAddPerson(events event) {
         event.addPersonGoing("Joe");
         int numPeople = event.getNumPeopleGoing();
         numPeople++;
         event.setNumPeopleGoing(numPeople);
     }
-
+    */
     public void unitTestDatabase(View a) {
         if (a.getId() == R.id.unitTestDatabase) {
             connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -234,11 +265,9 @@ public class MainActivity extends AppCompatActivity {
                 createNetErrorDialog();
             } else {
                 mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("testing");
                 newText = (TextView) findViewById(R.id.newTest);
                 String text = newText.getText().toString();
-                myRef.setValue(text);
+                mRef.setValue(text);
             }
 
         }
