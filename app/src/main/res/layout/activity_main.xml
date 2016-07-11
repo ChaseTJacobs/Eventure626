@@ -74,5 +74,14 @@
         android:layout_below="@+id/editTest"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GPS"
+        android:id="@+id/testGPS"
+        android:onClick="testGPS"
+        android:layout_above="@+id/eventInfo"
+        android:layout_alignStart="@+id/eventInfo" />
+
 
 </RelativeLayout>

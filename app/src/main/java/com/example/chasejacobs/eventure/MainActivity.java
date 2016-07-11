@@ -73,9 +73,12 @@ public class MainActivity extends AppCompatActivity {
         if (networkInfo == null) {
             createNetErrorDialog();
         }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET}, 10);
+            }
+        }
         loadFiles();
-        getLocation();
-
     }
 
     protected void loadFiles(){
@@ -134,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
         }
         TextView tv = (TextView) findViewById(R.id.gps);
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        MyLocListener loc = new MyLocListener();
+        //MyLocListener loc = new MyLocListener();
         Location myLoc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
+        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
         tv.setText("Latitude: " + myLoc.getLatitude() + "\nLongitude: " + myLoc.getLongitude());
     }
 
@@ -169,6 +172,11 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    public void testGPS (View v){
+        if (v.getId() == R.id.testGPS){
+            getLocation();
+        }
+    }
     /**
      * On the start of the app it will try and connect you to the database
      */
