@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     ConnectivityManager connMgr;
     NetworkInfo networkInfo;
     LocationManager manager;
+    MyLocListener loc;
+    Location myLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,16 +72,20 @@ public class MainActivity extends AppCompatActivity {
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             createGPSErrorDialog();
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET}, 1);
+                }
+            }
+
+            loc = new MyLocListener();
+            myLoc = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
         }
         if (networkInfo == null) {
             createNetErrorDialog();
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            int random = Build.VERSION.SDK_INT;
-            int random2 = Build.VERSION_CODES.M;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET}, 10);
-            }
         }
         loadFiles();
     }
@@ -132,17 +139,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        boolean requestedPermission = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET}, 10);
+                requestedPermission = true;
             }
         }
-        TextView tv = (TextView) findViewById(R.id.gps);
-        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        //MyLocListener loc = new MyLocListener();
-        Location myLoc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
-        tv.setText("Latitude: " + myLoc.getLatitude() + "\nLongitude: " + myLoc.getLongitude());
+        if(requestedPermission == false) {
+            manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            myLoc = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
+            if (myLoc != null) {
+                TextView tv = (TextView) findViewById(R.id.gps);
+                tv.setText("Latitude: " + myLoc.getLatitude() + "\nLongitude: " + myLoc.getLongitude());
+            } else {
+                Toast.makeText(this, "Finding Location", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     /**
