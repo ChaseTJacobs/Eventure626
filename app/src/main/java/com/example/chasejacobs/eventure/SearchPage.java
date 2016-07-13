@@ -13,6 +13,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +38,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     private ArrayAdapter<String> adapter;
     private ListView mainList;
     private String categorySelected = new String();
+    Firebase mRef;
 
     String[] eventName;
     String[] eventCategory;
@@ -90,6 +96,26 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     }
 
     public void unitTestLoadResults(View A){
+
+        mRef = new Firebase("https://eventure-8fca3.firebaseio.com");
+
+
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()){
+                    ArrayList<Object> searchResults = new ArrayList<>();
+                    searchResults.add(child.getValue());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
         mainList = (ListView) findViewById(R.id.listResults);
         final events NewEvent1 = new events();
         events NewEvent2 = new events();
