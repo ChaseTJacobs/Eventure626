@@ -14,7 +14,7 @@ public class MyLocListener implements LocationListener {
     public void onLocationChanged(Location location) {
         if(location != null){
             Log.e("Latitude :", ""+location.getLatitude());
-            Log.e("Latitude :", ""+location.getLatitude());
+            Log.e("Longitude :", ""+location.getLongitude());
         }
     }
 

@@ -35,7 +35,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
 
     Spinner spinner;
     private String categories[] = new String[9];
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> categorieAdapter;
     private ListView mainList;
     private String categorySelected = new String();
     Firebase mRef;
@@ -44,6 +44,8 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     String[] eventCategory;
     ArrayAdapter<String> eventAdapter;
     private static final String errTag = "SearchPage";
+    private ListView lv;
+    private ArrayAdapter<String> eventListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +64,11 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
 
         mainList = (ListView)findViewById(R.id.listResults);
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        categorieAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        categorieAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(categorieAdapter);
         spinner.setOnItemSelectedListener(this);
+        lv = (ListView) findViewById(R.id.listView);
     }
 
     /**
@@ -93,6 +96,21 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
             Intent i = new Intent (this, MainActivity.class);
             startActivity(i);
         }
+    }
+
+    public void eventListStorage(List<events> eventList){
+        final int listSize = eventList.size();
+        String[] eventString = new String[listSize];
+        for (int i = 0; i < listSize; i++){
+            eventString[i] = "";
+        }
+        for (int i = 0; i < listSize; i++){
+            eventString[i] = eventList.get(i).getEventName() + "\n" + eventList.get(i).getTime() + "\n" + eventList.get(i).getLocation();
+        }
+
+        eventListAdapter = new ArrayAdapter<String>(SearchPage.this, android.R.layout.simple_list_item_1, eventString);
+        lv.setAdapter(eventListAdapter);
+        lv.setTextFilterEnabled(true);
     }
 
     public void unitTestLoadResults(View A){

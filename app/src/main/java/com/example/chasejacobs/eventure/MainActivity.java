@@ -21,6 +21,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity for the main page
@@ -61,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     LocationManager manager;
     MyLocListener loc;
     Location myLoc;
+    private ListView lv;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         networkInfo = connMgr.getActiveNetworkInfo();
         yourEvents = new ArrayList<events>();
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        lv = (ListView) findViewById(R.id.listView);
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             createGPSErrorDialog();
         } else {
@@ -81,13 +87,74 @@ public class MainActivity extends AppCompatActivity {
             }
 
             loc = new MyLocListener();
-            myLoc = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
+            myLoc = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
         if (networkInfo == null) {
             createNetErrorDialog();
         }
         loadFiles();
+    }
+
+    public void eventListStorage(List<events> eventList){
+        final int listSize = eventList.size();
+        String[] eventString = new String[listSize];
+        for (int i = 0; i < listSize; i++){
+            eventString[i] = "";
+        }
+        for (int i = 0; i < listSize; i++){
+            eventString[i] = eventList.get(i).getEventName() + "\n" + eventList.get(i).getTime() + "\n" + eventList.get(i).getLocation();
+        }
+
+        adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, eventString);
+        lv.setAdapter(adapter);
+        lv.setTextFilterEnabled(true);
+    }
+
+    public void testListDisplay(View v){
+        events event = new events();
+        events event1 = new events();
+        events event2 = new events();
+        events event3 = new events();
+        events event4 = new events();
+
+        List<events> listOfEvents = new ArrayList<events>();
+
+        event.setEventName("Basketball");
+        event.setTime("08:00 PM");
+        event.setLocation("I-Center");
+
+        event1.setEventName("Pokemon");
+        event1.setTime("09:00 PM");
+        event1.setLocation("The Garden");
+
+        event2.setEventName("Frisbee");
+        event2.setTime("07:00 PM");
+        event2.setLocation("Porter Park");
+
+        event3.setEventName("Taco Party");
+        event3.setTime("01:00 PM");
+        event3.setLocation("Tacontento");
+
+        event4.setEventName("Concert");
+        event4.setTime("10:00 PM");
+        event4.setLocation("Stadium");
+        listOfEvents.add(event);
+        listOfEvents.add(event1);
+        listOfEvents.add(event2);
+        listOfEvents.add(event3);
+        listOfEvents.add(event4);
+        listOfEvents.add(event);
+        listOfEvents.add(event1);
+        listOfEvents.add(event2);
+        listOfEvents.add(event3);
+        listOfEvents.add(event4);
+
+        eventListStorage(listOfEvents);
+
+
+
+
     }
 
     protected void loadFiles(){

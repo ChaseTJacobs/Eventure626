@@ -16,7 +16,7 @@
         android:text="Next page"
         android:id="@+id/testNext"
         android:onClick="onButtonClick"
-        android:layout_alignTop="@+id/unitTestDatabase"
+        android:layout_alignParentBottom="true"
         android:layout_toStartOf="@+id/unitTestDatabase" />
 
     <Button
@@ -25,11 +25,10 @@
         android:text="Text Database"
         android:id="@+id/unitTestDatabase"
         android:nestedScrollingEnabled="false"
-        android:layout_marginBottom="100dp"
+        android:onClick="unitTestDatabase"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="56dp"
-        android:onClick="unitTestDatabase" />
+        android:layout_alignStart="@+id/gps"
+        android:layout_marginStart="20dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -53,25 +52,24 @@
         android:layout_height="wrap_content"
         android:text="Test Info"
         android:id="@+id/eventInfo"
+        android:onClick="onButtonClickTest"
         android:layout_above="@+id/searchEvents"
-        android:layout_centerHorizontal="true"
-        android:onClick="onButtonClickTest" />
+        android:layout_toEndOf="@+id/searchEvents" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editTest"
-        android:layout_below="@+id/newTest"
-        android:layout_alignEnd="@+id/eventInfo"
-        android:layout_marginTop="22dp"
-        android:text="NothingYet" />
+        android:text="NothingYet"
+        android:layout_alignTop="@+id/newTest"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/gps"
-        android:layout_below="@+id/editTest"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -80,8 +78,26 @@
         android:text="GPS"
         android:id="@+id/testGPS"
         android:onClick="testGPS"
-        android:layout_above="@+id/eventInfo"
-        android:layout_alignStart="@+id/eventInfo" />
+        android:layout_above="@+id/searchEvents"
+        android:layout_toStartOf="@+id/eventInfo" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/newTest"
+        android:layout_above="@+id/testGPS" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test List"
+        android:id="@+id/testList"
+        android:layout_above="@+id/searchEvents"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="24dp"
+        android:onClick="testListDisplay" />
 
 
 </RelativeLayout>
