@@ -124,6 +124,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                 for (DataSnapshot child : dataSnapshot.getChildren()){
                     ArrayList<Object> searchResults = new ArrayList<>();
                     searchResults.add(child.getValue());
+                    Log.i("Search Results", child.getValue().toString());
                 }
 
             }
