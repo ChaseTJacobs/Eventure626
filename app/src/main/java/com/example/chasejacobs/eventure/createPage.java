@@ -339,6 +339,8 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                         FileOutputStream outputStream = openFileOutput(filename, MODE_PRIVATE);
                                         outputStream.write(message.getBytes());
                                         outputStream.close();
+                                        Intent i = new Intent(createPage.this, MainActivity.class);
+                                        startActivity(i);
                                     } catch (FileNotFoundException e) {
                                         e.printStackTrace();
                                     } catch (IOException o) {
@@ -357,7 +359,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                 }
                             } else {
                                 AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                                myAlert.setMessage("Please enter date in the following format:\ndd/mm/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                myAlert.setMessage("Please enter date in the following format: dd/mm/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -367,7 +369,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                             }
                         } else {
                             AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                            myAlert.setMessage("Please enter the time in the following format:\nhh:mm AM or PM").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            myAlert.setMessage("Please enter the time in the following format: hh:mm AM or PM").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -378,7 +380,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                     } else if (checkDate.length() != 10
                             && checkTime.length() == 8) {
                         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                        myAlert.setMessage("Please enter the date in the following format:\nmm/dd/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        myAlert.setMessage("Please enter the date in the following format: mm/dd/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -388,7 +390,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                     } else if (checkDate.length() == 10
                             && checkTime.length() != 8) {
                         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                        myAlert.setMessage("Please enter the time in the following format:\nhh:mm AM or PM").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        myAlert.setMessage("Please enter the time in the following format: hh:mm AM or PM").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();

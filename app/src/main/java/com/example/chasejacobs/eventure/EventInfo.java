@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -22,6 +24,8 @@ import com.firebase.client.ValueEventListener;
 public class EventInfo extends AppCompatActivity {
     events test;
     Firebase mRef;
+    private ListView lv;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +41,20 @@ public class EventInfo extends AppCompatActivity {
         test.setCreatorName(bundle.getString("creatorName"));
         test.setLocation(bundle.getString("location"));
         test.setKey(bundle.getString("key"));
+        lv = (ListView) findViewById(R.id.listView2);
+        String[] eventInfo = new String[6];
+        eventInfo[0] = "Event Name: "+ test.getEventName();
+        eventInfo[1] = "Creator Name: "+ test.getCreatorName();
+        eventInfo[2] = "Location: " + test.getLocation();
+        eventInfo[3] = "Description: " + test.getDescription();
+        eventInfo[4] = "People Limit: " + test.getPeopleLimit();
+        eventInfo[5] = "Category: " + test.getCategory();
+        adapter = new ArrayAdapter<String>(EventInfo.this, android.R.layout.simple_list_item_1, eventInfo);
+        lv.setAdapter(adapter);
+        lv.setTextFilterEnabled(true);
+       // ArrayAdapter<String> adapter;
         
-        //// TODO: 7/14/16 There needs to be some way to display all this information (not the key though) on the EventInfo page 
+
     }
 
     public void joinEvent(View a){
