@@ -67,7 +67,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         categorieAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         categorieAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(categorieAdapter);
-        spinner.setOnItemSelectedListener(this);
+        spinner.setOnItemSelectedListener(SearchPage.this);
         lv = (ListView) findViewById(R.id.listResults);
     }
 
@@ -98,6 +98,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         }
     }
 
+    /*
     public void unitTestLoadResults(View A){
 
         mRef = new Firebase("https://eventure-8fca3.firebaseio.com");
@@ -182,4 +183,5 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     public void sendEvent(events temp){
 
     }
+    */
 }
