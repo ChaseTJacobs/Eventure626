@@ -193,29 +193,7 @@ public class EventInfo extends AppCompatActivity {
         } else {
             if (myLoc != null) {
                 final EditText name = (EditText) findViewById(R.id.userName);
-                final EditText peopleGoing = (EditText) findViewById(R.id.peopleGoing);
-                if (name.getText().toString().equals("")
-                        && peopleGoing.getText().toString().equals("")) {
-                    AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                    myAlert.setMessage("Please fill out all text fields!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create();
-                    myAlert.show();
-                } else if (!name.getText().toString().equals("")
-                        && peopleGoing.getText().toString().equals("")) {
-                    AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                    myAlert.setMessage("Please fill out the number of people going!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create();
-                    myAlert.show();
-                } else if (name.getText().toString().equals("")
-                        && !peopleGoing.getText().toString().equals("")) {
+                if (name.getText().toString().equals("")) {
                     AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
                     myAlert.setMessage("Please fill out your name!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -241,33 +219,6 @@ public class EventInfo extends AppCompatActivity {
                             String address = info.getMacAddress();
                             hRef = new Firebase("https://eventure-8fca3.firebaseio.com/address/" + address);
                             hRef.child(Integer.toString(joinEvent.getEventID())).setValue(message);
-                            /*
-                            String EventString = "Event: " + test.getEventName() + "\nDate: " + test.getDate() + "\nTime: " + test.getTime() + "\nLocation: " + test.getLocation();
-                            try {
-                                FileInputStream fileInput = openFileInput("yourGames");
-                                InputStreamReader readString = new InputStreamReader(fileInput);
-                                BufferedReader bReader = new BufferedReader(readString);
-                                StringBuffer sBuffer = new StringBuffer();
-                                while ((message = bReader.readLine()) != null) {
-                                    sBuffer.append(message + "\n");
-                                }
-                                message = sBuffer.toString();
-                            } catch (FileNotFoundException o) {
-                                o.printStackTrace();
-                            } catch (IOException c) {
-                                c.printStackTrace();
-                            }
-                            message = message + EventString + "\n";
-                            try {
-                                FileOutputStream outputStream = openFileOutput("yourGames", MODE_PRIVATE);
-                                outputStream.write(message.getBytes());
-                                outputStream.close();
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException o) {
-                                o.printStackTrace();
-                            }
-                            */
                             Intent i = new Intent(EventInfo.this, MainActivity.class);
                             startActivity(i);
                         }
