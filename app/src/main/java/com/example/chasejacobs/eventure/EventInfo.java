@@ -1,10 +1,12 @@
 package com.example.chasejacobs.eventure;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.firebase.client.DataSnapshot;
@@ -59,13 +61,18 @@ public class EventInfo extends AppCompatActivity {
 
     public void joinEvent(View a){
         mRef = new Firebase(test.getKey());
+        final EditText name = (EditText) findViewById(R.id.userName);
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 events joinEvent;
                 joinEvent = dataSnapshot.getValue(events.class);
+                joinEvent.addPersonGoing(name.getText().toString());
                 Log.i("stuff", dataSnapshot.getValue().toString());
+                mRef.setValue(joinEvent);
+                Intent i = new Intent(EventInfo.this, MainActivity.class);
+                startActivity(i);
             }
 
             @Override
