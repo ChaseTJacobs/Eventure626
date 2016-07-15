@@ -36,6 +36,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 import java.util.Random;
 
 /**
@@ -92,6 +93,11 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
 
         mRef = new Firebase("https://eventure-8fca3.firebaseio.com/event1");
 
+        final Calendar cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -134,7 +140,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
         @Override
         public void onDateSet(DatePicker view, int yearX, int monthOfYear, int dayOfMonth){
             year = yearX;
-            month = monthOfYear;
+            month = monthOfYear + 1;
             day = dayOfMonth;
             Toast.makeText(createPage.this, month + "/" + day + "/" + year, Toast.LENGTH_LONG);
         }
