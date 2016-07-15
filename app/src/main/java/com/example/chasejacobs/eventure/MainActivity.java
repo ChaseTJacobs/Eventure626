@@ -12,7 +12,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<events> yourEvents;
     Firebase mRef;
+    Firebase hRef;
     TextView newText;
     TextView testText;
     private static final String errorMsg = "MainActivity";
@@ -97,6 +101,13 @@ public class MainActivity extends AppCompatActivity {
             createNetErrorDialog();
         }
         loadFiles();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                eventListStorage(yourEvents);
+            }
+        }, 2000);
     }
 
     public void eventListStorage(List<events> eventList){
@@ -158,6 +169,30 @@ public class MainActivity extends AppCompatActivity {
 
     protected void loadFiles(){
         Log.i("Yes", "Load files");
+        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        String address = info.getMacAddress();
+        Log.i("Mac Address: ", address);
+        final List<String> newList = new ArrayList<>();
+        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/addresses" + address);
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()){
+                    Log.i("The first", child.getValue().toString());
+                    newList.add(child.getValue().toString());
+                    loadEvents(child.getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
+        /*
         String message = "";
 
         try{
@@ -170,9 +205,7 @@ public class MainActivity extends AppCompatActivity {
             }
             int index = 0;
             int counter = 0;
-            String temp = new String();
             while ((message=bReader.readLine()) != null){
-                temp = message.substring(0, 9);
                 if(!message.substring(0, 9).equals("Location:")) {
                     eventInfo[index] += "\n" + message;
                 }
@@ -200,6 +233,26 @@ public class MainActivity extends AppCompatActivity {
         catch (IOException c){
             c.printStackTrace();
         }
+        */
+    }
+
+    protected void loadEvents(String temp){
+        Log.i("Your Address", temp);
+        hRef = new Firebase(temp);
+        hRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.i("Your Data", dataSnapshot.getValue().toString());
+                    yourEvents.add(dataSnapshot.getValue(events.class));
+
+                //// TODO: 7/15/16 Display the ArrayList yourGames
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     protected void createGPSErrorDialog(){
@@ -289,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //newText = (TextView) findViewById(R.id.newTest);
-        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
+        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing/");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

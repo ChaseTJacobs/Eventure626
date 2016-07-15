@@ -128,7 +128,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     }
 
     public void unitTestLoadResults(View A){
-        mRef = new Firebase("https://eventure-8fca3.firebaseio.com");
+        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/events/");
         connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
         if (categorySelected.equals("Select Category")){

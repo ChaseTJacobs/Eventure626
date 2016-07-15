@@ -8,6 +8,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -44,6 +46,7 @@ import java.io.InputStreamReader;
 public class EventInfo extends AppCompatActivity {
     events test;
     Firebase mRef;
+    Firebase hRef;
     private ListView lv;
     private ArrayAdapter<String> adapter;
     ConnectivityManager connMgr;
@@ -232,7 +235,13 @@ public class EventInfo extends AppCompatActivity {
                             joinEvent.addPersonGoing(name.getText().toString());
                             Log.i("stuff", dataSnapshot.getValue().toString());
                             mRef.setValue(joinEvent);
-                            String message = "";
+                            String message = test.getKey();
+                            WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                            WifiInfo info = manager.getConnectionInfo();
+                            String address = info.getMacAddress();
+                            hRef = new Firebase("https://eventure-8fca3.firebaseio.com/address/" + address);
+                            hRef.child(Integer.toString(joinEvent.getEventID())).setValue(message);
+                            /*
                             String EventString = "Event: " + test.getEventName() + "\nDate: " + test.getDate() + "\nTime: " + test.getTime() + "\nLocation: " + test.getLocation();
                             try {
                                 FileInputStream fileInput = openFileInput("yourGames");
@@ -258,6 +267,7 @@ public class EventInfo extends AppCompatActivity {
                             } catch (IOException o) {
                                 o.printStackTrace();
                             }
+                            */
                             Intent i = new Intent(EventInfo.this, MainActivity.class);
                             startActivity(i);
                         }
