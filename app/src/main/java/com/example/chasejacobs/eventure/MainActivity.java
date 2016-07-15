@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         yourEvents = new ArrayList<events>();
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         lv = (ListView) findViewById(R.id.listView);
+        loc = new MyLocListener();
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             createGPSErrorDialog();
         } else {
@@ -85,10 +86,6 @@ public class MainActivity extends AppCompatActivity {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET}, 1);
                 }
             }
-
-            loc = new MyLocListener();
-            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
-            myLoc = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
         if (networkInfo == null) {
             createNetErrorDialog();
