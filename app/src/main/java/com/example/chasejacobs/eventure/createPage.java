@@ -353,8 +353,8 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                         newEvent.setLongitute((long) myLoc.getLongitude());
                                         newEvent.setCategory(categorySelected);
                                         Log.i("HAPPENS", "This happens, so it probably saves");
-                                        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
-                                        newEvent.setKey("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
+                                        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/events/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
+                                        newEvent.setKey("https://eventure-8fca3.firebaseio.com/events/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
                                         String EventString = "Event: " + newEvent.getEventName() + "\nDate: " + newEvent.getDate() + "\nTime: " + newEvent.getTime() + "\nLocation: " + newEvent.getLocation();
                                         mRef.setValue(newEvent);
                                         mRef.child("peopleGoing").setValue(newEvent.getPeopleGoing());
