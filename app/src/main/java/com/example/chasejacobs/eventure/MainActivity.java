@@ -251,11 +251,13 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /*
     public void testGPS (View v){
         if (v.getId() == R.id.testGPS){
             getLocation();
         }
     }
+    */
     /**
      * On the start of the app it will try and connect you to the database
      */
