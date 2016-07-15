@@ -23,18 +23,10 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/peopleGoing"
-        android:layout_above="@+id/joinEvent"
-        android:layout_alignEnd="@+id/joinEvent"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/userName"
-        android:layout_above="@+id/numPeopleGoingText"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/joinEvent" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -59,14 +51,6 @@
         android:text="Name"
         android:id="@+id/name"
         android:layout_above="@+id/userName"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Number of People Going"
-        android:id="@+id/numPeopleGoingText"
-        android:layout_above="@+id/peopleGoing"
         android:layout_alignParentStart="true" />
 
     <ListView

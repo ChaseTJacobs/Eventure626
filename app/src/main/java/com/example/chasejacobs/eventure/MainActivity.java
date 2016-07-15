@@ -1,15 +1,12 @@
 package com.example.chasejacobs.eventure;
 
-import android.*;
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
+
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,13 +16,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
+
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,19 +31,11 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.lang.String;
-import java.lang.StringBuffer;
+
 
 /**
  * Activity for the main page
@@ -126,48 +114,6 @@ public class MainActivity extends AppCompatActivity {
         lv.setTextFilterEnabled(true);
     }
 
-    public void testListDisplay(View v){
-        events event = new events();
-        events event1 = new events();
-        events event2 = new events();
-        events event3 = new events();
-        events event4 = new events();
-
-        List<events> listOfEvents = new ArrayList<events>();
-
-        event.setEventName("Basketball");
-        event.setTime("08:00 PM");
-        event.setLocation("I-Center");
-
-        event1.setEventName("Pokemon");
-        event1.setTime("09:00 PM");
-        event1.setLocation("The Garden");
-
-        event2.setEventName("Frisbee");
-        event2.setTime("07:00 PM");
-        event2.setLocation("Porter Park");
-
-        event3.setEventName("Taco Party");
-        event3.setTime("01:00 PM");
-        event3.setLocation("Tacontento");
-
-        event4.setEventName("Concert");
-        event4.setTime("10:00 PM");
-        event4.setLocation("Stadium");
-        listOfEvents.add(event);
-        listOfEvents.add(event1);
-        listOfEvents.add(event2);
-        listOfEvents.add(event3);
-        listOfEvents.add(event4);
-        listOfEvents.add(event);
-        listOfEvents.add(event1);
-        listOfEvents.add(event2);
-        listOfEvents.add(event3);
-        listOfEvents.add(event4);
-
-        //eventListStorage(listOfEvents);
-    }
-
     protected void loadFiles(){
         Log.i("Yes", "Load files");
         WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
@@ -175,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         String address = info.getMacAddress();
         Log.i("Mac Address: ", address);
         final List<String> newList = new ArrayList<>();
-        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/addresses" + address);
+        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/address/" + address);
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -191,50 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-        /*
-        String message = "";
-
-        try{
-            FileInputStream fileInput = openFileInput("yourGames");
-            InputStreamReader readString = new InputStreamReader(fileInput);
-            BufferedReader bReader = new BufferedReader(readString);
-            String eventInfo[] = new String [50];
-            for(int i = 0; i < eventInfo.length; i++){
-                eventInfo[i] = "";
-            }
-            int index = 0;
-            int counter = 0;
-            while ((message=bReader.readLine()) != null){
-                if(!message.substring(0, 9).equals("Location:")) {
-                    eventInfo[index] += "\n" + message;
-                }
-                else {
-                    eventInfo[index] += "\n" + message;
-                    index++;
-                }
-            }
-            for (int i = 0; i < eventInfo.length; i++){
-                if(!eventInfo[i].equals("")){
-                    counter++;
-                }
-            }
-            String[] finalInfo = new String[counter];
-            for (int i = 0; i < finalInfo.length; i++){
-                finalInfo[i] = eventInfo[i];
-            }
-            adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, finalInfo);
-            lv.setAdapter(adapter);
-            lv.setTextFilterEnabled(true);
-        }
-        catch (FileNotFoundException o){
-            o.printStackTrace();
-        }
-        catch (IOException c){
-            c.printStackTrace();
-        }
-        */
     }
 
     protected void loadEvents(String temp){
@@ -329,35 +231,6 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-
-    /*
-    public void testGPS (View v){
-        if (v.getId() == R.id.testGPS){
-            getLocation();
-        }
-    }
-    */
-    /**
-     * On the start of the app it will try and connect you to the database
-     */
-    protected void onStart() {
-        super.onStart();
-        //newText = (TextView) findViewById(R.id.newTest);
-        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing/");
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String text = dataSnapshot.getValue(String.class);
-                //newText.setText(text);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-        });
-    }
-
-
     /**
      * This is the on button click that takes the user to the create an
      * event page. It checks if you are connected to the internet before
@@ -376,31 +249,6 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Intent i = new Intent(this, createPage.class);
                 startActivity(i);
-            }
-        }
-    }
-
-    /**
-     * This is the on button click that takes the user to the event info
-     * page. It makes sure you are connected to the internet before taking you there.
-     *
-     * @param a
-     *
-    public void onButtonClickTest(View a) {
-        if (a.getId() == R.id.eventInfo) {
-            connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            networkInfo = connMgr.getActiveNetworkInfo();
-            if (networkInfo == null) {
-                createNetErrorDialog();
-            } else if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                createGPSErrorDialog();
-            } else {
-                try {
-                    Intent i = new Intent(this, EventInfo.class);
-                    startActivity(i);
-                } catch (Exception o) {
-                    Log.e(errorMsg, o.toString());
-                }
             }
         }
     }
@@ -425,38 +273,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    public void unitTestReceiveGames(View a) {
-        String eventName = "Soccer";
-        String creatorName = "Chase Jacobs";
-        String location = "BYUI Lower fields";
-        int NumPeopleGoing = 4;
-        int peopleLimit = 24;
-        ArrayList<String> peopleGoing = new ArrayList<String>();
-        peopleGoing.add("Bro Falin");
-        peopleGoing.add("Luke");
-        peopleGoing.add("Your mom");
-        peopleGoing.add("Chuck");
-        String category = "Sports";
-
-        events event = new events();
-        event.setEventName(eventName);
-        event.setCreatorName(creatorName);
-        event.setLocation(location);
-        event.setNumPeopleGoing(NumPeopleGoing);
-        event.setPeopleLimit(peopleLimit);
-        //event.setPeopleGoing(peopleGoing);
-        event.setCategory(category);
-        yourEvents.add(event);
-    }
-    /*
-    public void unitTestAddPerson(events event) {
-        event.addPersonGoing("Joe");
-        int numPeople = event.getNumPeopleGoing();
-        numPeople++;
-        event.setNumPeopleGoing(numPeople);
-    }
-    */
     public void unitTestDatabase(View a) {
         if (a.getId() == R.id.unitTestDatabase) {
             connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
