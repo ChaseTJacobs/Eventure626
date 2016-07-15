@@ -148,10 +148,6 @@ public class MainActivity extends AppCompatActivity {
         listOfEvents.add(event4);
 
         eventListStorage(listOfEvents);
-
-
-
-
     }
 
     protected void loadFiles(){
