@@ -2,6 +2,13 @@ package com.example.chasejacobs.eventure;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 /**
  * Activity for displaying a certain event
@@ -14,6 +21,7 @@ import android.os.Bundle;
  */
 public class EventInfo extends AppCompatActivity {
     events test;
+    Firebase mRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,22 +30,33 @@ public class EventInfo extends AppCompatActivity {
         test = new events();
         Bundle bundle = getIntent().getExtras();
         test.setDescription(bundle.getString("description"));
-        System.out.println(test.getDescription());
+        test.setEventName(bundle.getString("eventName"));
+        test.setCategory(bundle.getString("category"));
+        test.setPeopleLimit(Integer.parseInt(bundle.getString("peopleLimit")));
+        test.setEventID(Integer.parseInt(bundle.getString("eventID")));
+        test.setCreatorName(bundle.getString("creatorName"));
+        test.setLocation(bundle.getString("location"));
+        test.setKey(bundle.getString("key"));
+        
+        //// TODO: 7/14/16 There needs to be some way to display all this information (not the key though) on the EventInfo page 
     }
 
-    /**
-     * test event data to display the info.
-     */
-    public void displayInfoTest(){
-        test.setPeopleLimit(10);
-        test.setCreatorName("Luke");
-        test.setLocation("I-Center");
-        test.setCategory("Sports");
-        test.setDescription("Ball is life");
-        test.setNumPeopleGoing(10);
-        test.setEventName("BALL");
-        test.setDate("06/20/2016");
-        test.setTime("08:00 PM");
+    public void joinEvent(View a){
+        mRef = new Firebase(test.getKey());
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                events joinEvent;
+                joinEvent = dataSnapshot.getValue(events.class);
+                Log.i("stuff", dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
+
 }

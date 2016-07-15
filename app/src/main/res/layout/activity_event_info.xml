@@ -15,7 +15,9 @@
         android:text="Join Event"
         android:id="@+id/joinEvent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:nestedScrollingEnabled="false"
+        android:onClick="joinEvent" />
 
     <EditText
         android:layout_width="wrap_content"

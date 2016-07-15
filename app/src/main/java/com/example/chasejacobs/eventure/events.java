@@ -28,6 +28,7 @@ public class events {
     private int eventID;
     private long latitude;
     private long longitute;
+    private String key;
 
     public events(){}
 
@@ -67,6 +68,9 @@ public class events {
     }
     public long getLongitute() {
         return longitute;
+    }
+    public String getKey() {
+        return key;
     }
 
     public void addPersonGoing(String person){
@@ -110,5 +114,8 @@ public class events {
     }
     public void setLongitute(long longitute) {
         this.longitute = longitute;
+    }
+    public void setKey(String key) {
+        this.key = key;
     }
 }

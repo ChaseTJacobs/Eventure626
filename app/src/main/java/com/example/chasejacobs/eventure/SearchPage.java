@@ -116,14 +116,10 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<events> searchResults = new ArrayList<>();
+                    final List<events> searchResults = new ArrayList<>();
                     for (DataSnapshot child : dataSnapshot.getChildren()){
-                        Log.i("Category Selected", categorySelected);
-                        Log.i("CategoryFromChild", child.getValue(events.class).getCategory());
                         if (child.getValue(events.class).getCategory().equals(categorySelected)){
                             searchResults.add(child.getValue(events.class));
-                            Log.i("Search Results", child.getValue().toString());
-                            Log.i("ThisWorks","ayyyyy");
                         }
 
                     }
@@ -140,9 +136,23 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                     lv.setAdapter(adapter);
                     lv.setTextFilterEnabled(true);
 
-                    lv.setOnItemClickListener(new AdapterView.OnItemSelectedListener() {
+                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                            Bundle bundle = new Bundle();
+                            bundle.putString("eventName", searchResults.get(position).getEventName());
+                            bundle.putString("category", searchResults.get(position).getCategory());
+                            bundle.putString("peopleLimit", String.valueOf(searchResults.get(position).getPeopleLimit()));
+                            bundle.putString("eventID", String.valueOf(searchResults.get(position).getEventID()));
+                            bundle.putString("creatorName", searchResults.get(position).getCreatorName());
+                            bundle.putString("location", searchResults.get(position).getLocation());
+                            bundle.putString("description", searchResults.get(position).getDescription());
+                            bundle.putString("key", searchResults.get(position).getKey());
 
-                    }););
+                            Intent i = new Intent(SearchPage.this, EventInfo.class);
+                            i.putExtras(bundle);
+                            startActivity(i);
+                        }
+                    });
                 }
 
                 @Override
@@ -151,32 +161,6 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                 }
             });
         }
-
-
-        //mainList = (ListView) findViewById(R.id.listResults);
-
-        eventAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,eventName);
-        mainList.setAdapter(eventAdapter);
-        mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(errTag, NewEvent1.getEventName());
-                Bundle bundle = new Bundle();
-                bundle.putString("eventName", NewEvent1.getEventName());
-                bundle.putString("category", NewEvent1.getCategory());
-                bundle.putString("peopleLimit", String.valueOf(NewEvent1.getPeopleLimit()));
-                bundle.putString("eventID", String.valueOf(NewEvent1.getEventID()));
-                bundle.putString("creatorName", NewEvent1.getCreatorName());
-                bundle.putString("location", NewEvent1.getLocation());
-                bundle.putString("description", NewEvent1.getDescription());
-
-                Intent i = new Intent(SearchPage.this, EventInfo.class);
-                i.putExtras(bundle);
-                startActivity(i);
-            }
-        });
-
-
     }
 
     public void sendEvent(events temp){

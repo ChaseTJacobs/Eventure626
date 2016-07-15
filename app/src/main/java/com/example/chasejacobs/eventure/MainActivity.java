@@ -259,13 +259,13 @@ public class MainActivity extends AppCompatActivity {
      */
     protected void onStart() {
         super.onStart();
-        newText = (TextView) findViewById(R.id.newTest);
+        //newText = (TextView) findViewById(R.id.newTest);
         mRef = new Firebase("https://eventure-8fca3.firebaseio.com/testing");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String text = dataSnapshot.getValue(String.class);
-                newText.setText(text);
+                //newText.setText(text);
             }
 
             @Override
