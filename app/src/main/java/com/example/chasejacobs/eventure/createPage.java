@@ -246,10 +246,10 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
         if (a.getId() == R.id.createButton) {
             EditText eventName = (EditText) findViewById(R.id.eventNameInput);
             EditText location = (EditText) findViewById(R.id.locationInput);
-            EditText time = (EditText) findViewById(R.id.descriptionInput);
+            EditText time = (EditText) findViewById(R.id.timeInput);
             EditText creatorsName = (EditText) findViewById(R.id.creatorNameInput);
-            EditText description = (EditText) findViewById(R.id.dateInput);
-            EditText date = (EditText) findViewById(R.id.timeInput);
+            EditText description = (EditText) findViewById(R.id.descriptionInput);
+            EditText date = (EditText) findViewById(R.id.dateInput);
             EditText peopleLimit = (EditText) findViewById(R.id.peopleLimitInput);
             getLocation();
             connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
