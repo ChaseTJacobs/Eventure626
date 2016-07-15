@@ -219,147 +219,29 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
             EditText peopleLimit = (EditText) findViewById(R.id.peopleLimitInput);
             getLocation();
 
-            if (myLoc != null) {
-                if (!eventName.getText().toString().equals("")
-                        && !location.getText().toString().equals("")
-                        && !time.getText().toString().equals("")
-                        && !creatorsName.getText().toString().equals("")
-                        && !description.getText().toString().equals("")
-                        && !date.getText().toString().equals("")
-                        && !peopleLimit.getText().toString().equals("")
-                        && !categorySelected.equals("Select Category")) {
-                    String checkTime = time.getText().toString();
-                    String checkDate = date.getText().toString();
-                    if (checkDate.length() == 10 && checkTime.length() == 8) {
-                        try {
-                            dayChecker = Integer.parseInt(checkDate.substring(3, 5));
-                            monthChecker = Integer.parseInt(checkDate.substring(0, 2));
-                            yearChecker = Integer.parseInt(checkDate.substring(6, 10));
-                            Log.i(errorTag, checkDate);
-                        } catch (NumberFormatException e) {
-                            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                            myAlert.setMessage("Please type enter a valid date!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).create();
-                            myAlert.show();
-                        }
-                        try {
-                            hourChecker = Integer.parseInt(checkTime.substring(0, 2));
-                            minuteChecker = Integer.parseInt(checkTime.substring(3, 5));
-                        } catch (NumberFormatException e) {
-                            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                            myAlert.setMessage("Please type enter a valid time!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).create();
-                            myAlert.show();
-                        }
-                        if (dayChecker <= 0
-                                || dayChecker > 31
-                                || monthChecker <= 0
-                                || monthChecker > 12
-                                || yearChecker < 2016
-                                || yearChecker > 2030) {
-                            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                            myAlert.setMessage("Please enter a valid date!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).create();
-                            myAlert.show();
-                        } else if (minuteChecker < 0
-                                || minuteChecker > 59
-                                || hourChecker <= 0
-                                || hourChecker > 12) {
-                            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                            myAlert.setMessage("Please enter a valid time!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).create();
-                            myAlert.show();
-                        } else if (checkTime.length() == 8
-                                && checkTime.charAt(2) == ':'
-                                && checkTime.charAt(5) == ' '
-                                && (checkTime.substring(6, 8).toUpperCase().equals("PM")
-                                || checkTime.substring(6, 8).toUpperCase().equals("AM"))) {
-                            if (checkDate.length() == 10
-                                    && checkDate.charAt(2) == '/'
-                                    && checkDate.charAt(5) == '/'
-                                    ) {
-                                try {
-                                    events newEvent = new events();
-                                    newEvent.setPeopleLimit(Integer.parseInt(peopleLimit.getText().toString()));
-                                    Random rand = new Random();
-                                    newEvent.setEventID(rand.nextInt(2000) + 1);
-                                    newEvent.setEventName(eventName.getText().toString());
-                                    newEvent.setLocation(location.getText().toString());
-                                    newEvent.setCreatorName(creatorsName.getText().toString());
-                                    newEvent.setDescription(description.getText().toString());
-                                    newEvent.setTime(time.getText().toString());
-                                    newEvent.setCreatorName(creatorsName.getText().toString());
-                                    newEvent.setDate(date.getText().toString());
-                                    newEvent.setPeopleLimit(Integer.parseInt(peopleLimit.getText().toString()));
-                                    newEvent.setLatitude((long) myLoc.getLatitude());
-                                    newEvent.setLongitute((long) myLoc.getLongitude());
-                                newEvent.setCategory(categorySelected);
-                                Log.i("HAPPENS","This happens, so it probably saves");
-                                mRef = new Firebase("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
-                                newEvent.setKey("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
-                                String EventString = "Event: " + newEvent.getEventName() + "\nDate: " + newEvent.getDate() + "\nTime: " + newEvent.getTime() +  "\nLocation: " + newEvent.getLocation();
-                                mRef.setValue(newEvent);
-                                mRef.child("peopleGoing").setValue(newEvent.getPeopleGoing());
-                                //read old file
-                                String message = "";
-                                    try {
-                                        FileInputStream fileInput = openFileInput("yourGames");
-                                        InputStreamReader readString = new InputStreamReader(fileInput);
-                                        BufferedReader bReader = new BufferedReader(readString);
-                                        StringBuffer sBuffer = new StringBuffer();
-                                        while ((message = bReader.readLine()) != null) {
-                                            sBuffer.append(message + "\n");
-                                        }
-                                        message = sBuffer.toString();
-                                    } catch (FileNotFoundException o) {
-                                        o.printStackTrace();
-                                    } catch (IOException c) {
-                                        c.printStackTrace();
-                                    }
-                                    message = message + EventString + "\n";
-                                    //write new file
-                                    Log.i("Yes", "Load files");
-                                    try {
-                                        FileOutputStream outputStream = openFileOutput(filename, MODE_PRIVATE);
-                                        outputStream.write(message.getBytes());
-                                        outputStream.close();
-                                        Intent i = new Intent(createPage.this, MainActivity.class);
-                                        startActivity(i);
-                                    } catch (FileNotFoundException e) {
-                                        e.printStackTrace();
-                                    } catch (IOException o) {
-                                        o.printStackTrace();
-                                    }
-                                } catch (NumberFormatException e) {
-                                    AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                                    myAlert.setMessage("Please type in a number for people limit!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    }).create();
-                                    myAlert.show();
-                                    Log.e(errorTag, e.getMessage());
-                                }
-                            } else {
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                createGPSErrorDialog();
+            }else {
+                if (myLoc != null) {
+                    if (!eventName.getText().toString().equals("")
+                            && !location.getText().toString().equals("")
+                            && !time.getText().toString().equals("")
+                            && !creatorsName.getText().toString().equals("")
+                            && !description.getText().toString().equals("")
+                            && !date.getText().toString().equals("")
+                            && !peopleLimit.getText().toString().equals("")
+                            && !categorySelected.equals("Select Category")) {
+                        String checkTime = time.getText().toString();
+                        String checkDate = date.getText().toString();
+                        if (checkDate.length() == 10 && checkTime.length() == 8) {
+                            try {
+                                dayChecker = Integer.parseInt(checkDate.substring(3, 5));
+                                monthChecker = Integer.parseInt(checkDate.substring(0, 2));
+                                yearChecker = Integer.parseInt(checkDate.substring(6, 10));
+                                Log.i(errorTag, checkDate);
+                            } catch (NumberFormatException e) {
                                 AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                                myAlert.setMessage("Please enter date in the following format: dd/mm/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                myAlert.setMessage("Please type enter a valid date!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -367,7 +249,149 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                 }).create();
                                 myAlert.show();
                             }
-                        } else {
+                            try {
+                                hourChecker = Integer.parseInt(checkTime.substring(0, 2));
+                                minuteChecker = Integer.parseInt(checkTime.substring(3, 5));
+                            } catch (NumberFormatException e) {
+                                AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                                myAlert.setMessage("Please type enter a valid time!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+                                myAlert.show();
+                            }
+                            if (dayChecker <= 0
+                                    || dayChecker > 31
+                                    || monthChecker <= 0
+                                    || monthChecker > 12
+                                    || yearChecker < 2016
+                                    || yearChecker > 2030) {
+                                AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                                myAlert.setMessage("Please enter a valid date!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+                                myAlert.show();
+                            } else if (minuteChecker < 0
+                                    || minuteChecker > 59
+                                    || hourChecker <= 0
+                                    || hourChecker > 12) {
+                                AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                                myAlert.setMessage("Please enter a valid time!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+                                myAlert.show();
+                            } else if (checkTime.length() == 8
+                                    && checkTime.charAt(2) == ':'
+                                    && checkTime.charAt(5) == ' '
+                                    && (checkTime.substring(6, 8).toUpperCase().equals("PM")
+                                    || checkTime.substring(6, 8).toUpperCase().equals("AM"))) {
+                                if (checkDate.length() == 10
+                                        && checkDate.charAt(2) == '/'
+                                        && checkDate.charAt(5) == '/'
+                                        ) {
+                                    try {
+                                        events newEvent = new events();
+                                        newEvent.setPeopleLimit(Integer.parseInt(peopleLimit.getText().toString()));
+                                        Random rand = new Random();
+                                        newEvent.setEventID(rand.nextInt(2000) + 1);
+                                        newEvent.setEventName(eventName.getText().toString());
+                                        newEvent.setLocation(location.getText().toString());
+                                        newEvent.setCreatorName(creatorsName.getText().toString());
+                                        newEvent.setDescription(description.getText().toString());
+                                        newEvent.setTime(time.getText().toString());
+                                        newEvent.setCreatorName(creatorsName.getText().toString());
+                                        newEvent.setDate(date.getText().toString());
+                                        newEvent.setPeopleLimit(Integer.parseInt(peopleLimit.getText().toString()));
+                                        newEvent.setLatitude((long) myLoc.getLatitude());
+                                        newEvent.setLongitute((long) myLoc.getLongitude());
+                                        newEvent.setCategory(categorySelected);
+                                        Log.i("HAPPENS", "This happens, so it probably saves");
+                                        mRef = new Firebase("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
+                                        newEvent.setKey("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
+                                        String EventString = "Event: " + newEvent.getEventName() + "\nDate: " + newEvent.getDate() + "\nTime: " + newEvent.getTime() + "\nLocation: " + newEvent.getLocation();
+                                        mRef.setValue(newEvent);
+                                        mRef.child("peopleGoing").setValue(newEvent.getPeopleGoing());
+                                        //read old file
+                                        String message = "";
+                                        try {
+                                            FileInputStream fileInput = openFileInput("yourGames");
+                                            InputStreamReader readString = new InputStreamReader(fileInput);
+                                            BufferedReader bReader = new BufferedReader(readString);
+                                            StringBuffer sBuffer = new StringBuffer();
+                                            while ((message = bReader.readLine()) != null) {
+                                                sBuffer.append(message + "\n");
+                                            }
+                                            message = sBuffer.toString();
+                                        } catch (FileNotFoundException o) {
+                                            o.printStackTrace();
+                                        } catch (IOException c) {
+                                            c.printStackTrace();
+                                        }
+                                        message = message + EventString + "\n";
+                                        //write new file
+                                        Log.i("Yes", "Load files");
+                                        try {
+                                            FileOutputStream outputStream = openFileOutput(filename, MODE_PRIVATE);
+                                            outputStream.write(message.getBytes());
+                                            outputStream.close();
+                                            Intent i = new Intent(createPage.this, MainActivity.class);
+                                            startActivity(i);
+                                        } catch (FileNotFoundException e) {
+                                            e.printStackTrace();
+                                        } catch (IOException o) {
+                                            o.printStackTrace();
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                                        myAlert.setMessage("Please type in a number for people limit!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).create();
+                                        myAlert.show();
+                                        Log.e(errorTag, e.getMessage());
+                                    }
+                                } else {
+                                    AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                                    myAlert.setMessage("Please enter date in the following format: dd/mm/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    }).create();
+                                    myAlert.show();
+                                }
+                            } else {
+                                AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                                myAlert.setMessage("Please enter the time in the following format: hh:mm AM or PM").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+                                myAlert.show();
+                            }
+                        } else if (checkDate.length() != 10
+                                && checkTime.length() == 8) {
+                            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                            myAlert.setMessage("Please enter the date in the following format: mm/dd/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).create();
+                            myAlert.show();
+                        } else if (checkDate.length() == 10
+                                && checkTime.length() != 8) {
                             AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
                             myAlert.setMessage("Please enter the time in the following format: hh:mm AM or PM").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
@@ -376,21 +400,26 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                 }
                             }).create();
                             myAlert.show();
+                        } else {
+                            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                            myAlert.setMessage("Please enter the time in the following format: hh:mm AM or PM\nAnd the date in the following format: mm/dd/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).create();
+                            myAlert.show();
                         }
-                    } else if (checkDate.length() != 10
-                            && checkTime.length() == 8) {
+                    } else if (!eventName.getText().toString().equals("")
+                            && !location.getText().toString().equals("")
+                            && !time.getText().toString().equals("")
+                            && !creatorsName.getText().toString().equals("")
+                            && !description.getText().toString().equals("")
+                            && !date.getText().toString().equals("")
+                            && !peopleLimit.getText().toString().equals("")
+                            && categorySelected.equals("Select Category")) {
                         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                        myAlert.setMessage("Please enter the date in the following format: mm/dd/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create();
-                        myAlert.show();
-                    } else if (checkDate.length() == 10
-                            && checkTime.length() != 8) {
-                        AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                        myAlert.setMessage("Please enter the time in the following format: hh:mm AM or PM").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        myAlert.setMessage("Please select a category!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -399,7 +428,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                         myAlert.show();
                     } else {
                         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                        myAlert.setMessage("Please enter the time in the following format: hh:mm AM or PM\nAnd the date in the following format: mm/dd/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        myAlert.setMessage("Please fill out all text fields!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -407,38 +436,13 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                         }).create();
                         myAlert.show();
                     }
-                } else if (!eventName.getText().toString().equals("")
-                        && !location.getText().toString().equals("")
-                        && !time.getText().toString().equals("")
-                        && !creatorsName.getText().toString().equals("")
-                        && !description.getText().toString().equals("")
-                        && !date.getText().toString().equals("")
-                        && !peopleLimit.getText().toString().equals("")
-                        && categorySelected.equals("Select Category")) {
-                    AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                    myAlert.setMessage("Please select a category!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create();
-                    myAlert.show();
+
+
+                    // TODO: 6/9/16 save event to server
+
                 } else {
-                    AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                    myAlert.setMessage("Please fill out all text fields!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create();
-                    myAlert.show();
+                    Toast.makeText(this, "Finding Location", Toast.LENGTH_LONG).show();
                 }
-
-
-                // TODO: 6/9/16 save event to server
-
-            }else{
-                Toast.makeText(this, "Finding Location", Toast.LENGTH_LONG).show();
             }
         }
     }
