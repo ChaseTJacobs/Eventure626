@@ -1,6 +1,8 @@
 package com.example.chasejacobs.eventure;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,9 +38,9 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     Spinner spinner;
     private String categories[] = new String[9];
     private ArrayAdapter<String> categorieAdapter;
-    private ListView mainList;
     private String categorySelected = new String();
     Firebase mRef;
+    private ArrayAdapter<String> adapter;
 
     String[] eventName;
     String[] eventCategory;
@@ -62,13 +64,11 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         categories[7] = "Charity";
         categories[8] = "Other";
 
-        mainList = (ListView)findViewById(R.id.listResults);
-
         categorieAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         categorieAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(categorieAdapter);
         spinner.setOnItemSelectedListener(this);
-        lv = (ListView) findViewById(R.id.listView);
+        lv = (ListView) findViewById(R.id.listResults);
     }
 
     /**
@@ -98,79 +98,59 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         }
     }
 
-    public void eventListStorage(List<events> eventList){
-        final int listSize = eventList.size();
-        String[] eventString = new String[listSize];
-        for (int i = 0; i < listSize; i++){
-            eventString[i] = "";
-        }
-        for (int i = 0; i < listSize; i++){
-            eventString[i] = eventList.get(i).getEventName() + "\n" + eventList.get(i).getTime() + "\n" + eventList.get(i).getLocation();
-        }
-
-        eventListAdapter = new ArrayAdapter<String>(SearchPage.this, android.R.layout.simple_list_item_1, eventString);
-        lv.setAdapter(eventListAdapter);
-        lv.setTextFilterEnabled(true);
-    }
-
     public void unitTestLoadResults(View A){
 
         mRef = new Firebase("https://eventure-8fca3.firebaseio.com");
 
+        if (categorySelected.equals("Select Category")){
+            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+            myAlert.setMessage("Please select a category!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create();
+            myAlert.show();
+        }
+        else{
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<events> searchResults = new ArrayList<>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()){
+                        Log.i("Category Selected", categorySelected);
+                        Log.i("CategoryFromChild", child.getValue(events.class).getCategory());
+                        if (child.getValue(events.class).getCategory().equals(categorySelected)){
+                            searchResults.add(child.getValue(events.class));
+                            Log.i("Search Results", child.getValue().toString());
+                            Log.i("ThisWorks","ayyyyy");
+                        }
 
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()){
-                    ArrayList<Object> searchResults = new ArrayList<>();
-                    searchResults.add(child.getValue());
-                    Log.i("Search Results", child.getValue().toString());
+                    }
+                    final int listSize = searchResults.size();
+                    String[] eventString = new String[listSize];
+                    for (int i = 0; i < listSize; i++){
+                        eventString[i] = "";
+                    }
+                    for (int i = 0; i < listSize; i++){
+                        eventString[i] = searchResults.get(i).getEventName() + "\n" + searchResults.get(i).getTime() + "\n" + searchResults.get(i).getLocation();
+                    }
+
+                    adapter = new ArrayAdapter<String>(SearchPage.this, android.R.layout.simple_list_item_1, eventString);
+                    lv.setAdapter(adapter);
+                    lv.setTextFilterEnabled(true);
                 }
 
-            }
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        mainList = (ListView) findViewById(R.id.listResults);
-        final events NewEvent1 = new events();
-        events NewEvent2 = new events();
-        events NewEvent3 = new events();
-        NewEvent1.setEventName("FFA Soccer");
-        NewEvent1.setCategory("Sports");
-        NewEvent1.setPeopleLimit(4);
-        ArrayList<String> test = new ArrayList<String>();
-        test.add("Bob");
-        test.add("John");
-        test.add("someGirl");
-        NewEvent1.setPeopleGoing(test);
-        NewEvent1.setDescription("A game of soccer free for all, where everyone tries to get their own goals");
-        NewEvent1.setCreatorName("Chase Jacobs");
-        NewEvent1.setLocation("Some field");
-        NewEvent1.setNumPeopleGoing(4);
-        NewEvent1.setEventID(1511329);
-
-        NewEvent2.setEventName("Board game night");
-        NewEvent2.setCategory("Board Games");
-        NewEvent3.setEventName("Volunteer Food Drive");
-        NewEvent3.setCategory("Charity");
-        List<events> stuff = new ArrayList<events>();
-        stuff.add(NewEvent1);
-        stuff.add(NewEvent2);
-        stuff.add(NewEvent3);
-
-        int result = 3;
-        eventName = new String[result];
-        eventCategory = new String[result];
-
-        for (int i = 0; i < result; i++){
-            eventName[i] = stuff.get(i).getEventName();
-            eventCategory[i] = stuff.get(i).getCategory();
-            Log.i(errTag, eventName[i]);
+                }
+            });
         }
+
+
+        //mainList = (ListView) findViewById(R.id.listResults);
+        /*
         eventAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,eventName);
         mainList.setAdapter(eventAdapter);
         mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -191,6 +171,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                 startActivity(i);
             }
         });
+        */
 
     }
 
