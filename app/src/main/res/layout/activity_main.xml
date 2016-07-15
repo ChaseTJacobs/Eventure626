@@ -63,21 +63,12 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GPS"
-        android:id="@+id/testGPS"
-        android:onClick="testGPS"
-        android:layout_above="@+id/searchEvents"
-        android:layout_toStartOf="@+id/eventInfo" />
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/testGPS" />
+        android:layout_above="@+id/searchEvents" />
 
     <Button
         android:layout_width="wrap_content"
