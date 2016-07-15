@@ -139,6 +139,10 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                     adapter = new ArrayAdapter<String>(SearchPage.this, android.R.layout.simple_list_item_1, eventString);
                     lv.setAdapter(adapter);
                     lv.setTextFilterEnabled(true);
+
+                    lv.setOnItemClickListener(new AdapterView.OnItemSelectedListener() {
+
+                    }););
                 }
 
                 @Override
@@ -150,7 +154,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
 
 
         //mainList = (ListView) findViewById(R.id.listResults);
-        /*
+
         eventAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,eventName);
         mainList.setAdapter(eventAdapter);
         mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -171,7 +175,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                 startActivity(i);
             }
         });
-        */
+
 
     }
 
