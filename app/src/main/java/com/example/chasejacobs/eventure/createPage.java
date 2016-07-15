@@ -218,10 +218,15 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
             EditText date = (EditText) findViewById(R.id.dateInput);
             EditText peopleLimit = (EditText) findViewById(R.id.peopleLimitInput);
             getLocation();
+            connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            networkInfo = connMgr.getActiveNetworkInfo();
 
             if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 createGPSErrorDialog();
-            }else {
+            } else if(networkInfo == null) {
+                createNetErrorDialog();
+            }
+            else {
                 if (myLoc != null) {
                     if (!eventName.getText().toString().equals("")
                             && !location.getText().toString().equals("")

@@ -1,7 +1,12 @@
 package com.example.chasejacobs.eventure;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,17 +42,14 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
 
     Spinner spinner;
     private String categories[] = new String[9];
-    private ArrayAdapter<String> categorieAdapter;
+    private ArrayAdapter<String> categoryAdapter;
     private String categorySelected = new String();
     Firebase mRef;
     private ArrayAdapter<String> adapter;
-
-    String[] eventName;
-    String[] eventCategory;
-    ArrayAdapter<String> eventAdapter;
     private static final String errTag = "SearchPage";
     private ListView lv;
-    private ArrayAdapter<String> eventListAdapter;
+    ConnectivityManager connMgr;
+    NetworkInfo networkInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,14 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         categories[7] = "Charity";
         categories[8] = "Other";
 
-        categorieAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-        categorieAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(categorieAdapter);
+        categoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(categoryAdapter);
         spinner.setOnItemSelectedListener(SearchPage.this);
         lv = (ListView) findViewById(R.id.listResults);
+        connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connMgr.getActiveNetworkInfo();
+
     }
 
     /**
@@ -98,11 +103,34 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         }
     }
 
+    protected void createNetErrorDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You need a network connection to use this application. Please turn on mobile network or Wi-Fi in Settings.")
+                .setTitle("Unable to connect")
+                .setCancelable(false)
+                .setPositiveButton("Settings",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                                startActivity(i);
+                            }
+                        }
+                )
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SearchPage.this.finish();
+                            }
+                        }
+                );
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     public void unitTestLoadResults(View A){
-
         mRef = new Firebase("https://eventure-8fca3.firebaseio.com");
-
+        connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connMgr.getActiveNetworkInfo();
         if (categorySelected.equals("Select Category")){
             AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
             myAlert.setMessage("Please select a category!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -112,6 +140,9 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                 }
             }).create();
             myAlert.show();
+        }
+        else if(networkInfo == null){
+            createNetErrorDialog();
         }
         else{
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {

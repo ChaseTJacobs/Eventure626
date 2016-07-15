@@ -1,7 +1,16 @@
 package com.example.chasejacobs.eventure;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +46,11 @@ public class EventInfo extends AppCompatActivity {
     Firebase mRef;
     private ListView lv;
     private ArrayAdapter<String> adapter;
+    ConnectivityManager connMgr;
+    NetworkInfo networkInfo;
+    LocationManager manager;
+    MyLocListener loc;
+    Location myLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +81,95 @@ public class EventInfo extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(EventInfo.this, android.R.layout.simple_list_item_1, eventInfo);
         lv.setAdapter(adapter);
         lv.setTextFilterEnabled(true);
+        connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connMgr.getActiveNetworkInfo();
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        loc = new MyLocListener();
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            createGPSErrorDialog();
+        } else {
+            if(networkInfo != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.INTERNET}, 1);
+                    }
+                }
+            }
+        }
+        if (networkInfo == null) {
+            createNetErrorDialog();
+        }
+    }
+
+    protected void createGPSErrorDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This application needs to acces your location. Please enable your GPS location.")
+                .setTitle("Unable to find your location")
+                .setCancelable(false)
+                .setPositiveButton("Settings",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(i);
+                            }
+                        }
+                )
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                EventInfo.this.finish();
+                            }
+                        }
+                );
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void getLocation() {
+        boolean requestedPermission = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.INTERNET}, 10);
+                requestedPermission = true;
+            }
+        }
+        if (requestedPermission == false) {
+            manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            myLoc = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
+        }
+    }
+
+    /**
+     * This function will display the error message if you are not connected to the internet.
+     * It will give the user the option to connect and if the choose not to, it will quit the app.
+     *
+     */
+    protected void createNetErrorDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You need a network connection to use this application. Please turn on mobile network or Wi-Fi in Settings.")
+                .setTitle("Unable to connect")
+                .setCancelable(false)
+                .setPositiveButton("Settings",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                                startActivity(i);
+                            }
+                        }
+                )
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                EventInfo.this.finish();
+                            }
+                        }
+                );
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public void onBackButton(View a){
@@ -77,88 +180,95 @@ public class EventInfo extends AppCompatActivity {
     }
 
     public void joinEvent(View a){
-
-        final EditText name = (EditText) findViewById(R.id.userName);
-        final EditText peopleGoing = (EditText) findViewById(R.id.peopleGoing);
-        if(name.getText().toString().equals("")
-                && peopleGoing.getText().toString().equals("")){
-            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-            myAlert.setMessage("Please fill out all text fields!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).create();
-            myAlert.show();
-        }
-        else if(!name.getText().toString().equals("")
-                && peopleGoing.getText().toString().equals("")){
-            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-            myAlert.setMessage("Please fill out the number of people going!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).create();
-            myAlert.show();
-        }
-        else if(name.getText().toString().equals("")
-                && !peopleGoing.getText().toString().equals("")){
-            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-            myAlert.setMessage("Please fill out your name!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).create();
-            myAlert.show();
-        }
-        else {
-            mRef = new Firebase(test.getKey());
-            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    events joinEvent;
-                    joinEvent = dataSnapshot.getValue(events.class);
-                    joinEvent.addPersonGoing(name.getText().toString());
-                    Log.i("stuff", dataSnapshot.getValue().toString());
-                    mRef.setValue(joinEvent);
-                    String message = "";
-                    String EventString = "Event: " + test.getEventName() + "\nDate: " + test.getDate() + "\nTime: " + test.getTime() +  "\nLocation: " + test.getLocation();
-                    try {
-                        FileInputStream fileInput = openFileInput("yourGames");
-                        InputStreamReader readString = new InputStreamReader(fileInput);
-                        BufferedReader bReader = new BufferedReader(readString);
-                        StringBuffer sBuffer = new StringBuffer();
-                        while ((message = bReader.readLine()) != null) {
-                            sBuffer.append(message + "\n");
+        connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connMgr.getActiveNetworkInfo();
+        getLocation();
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            createGPSErrorDialog();
+        } else if(networkInfo == null) {
+            createNetErrorDialog();
+        } else {
+            if (myLoc != null) {
+                final EditText name = (EditText) findViewById(R.id.userName);
+                final EditText peopleGoing = (EditText) findViewById(R.id.peopleGoing);
+                if (name.getText().toString().equals("")
+                        && peopleGoing.getText().toString().equals("")) {
+                    AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                    myAlert.setMessage("Please fill out all text fields!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
                         }
-                        message = sBuffer.toString();
-                    } catch (FileNotFoundException o) {
-                        o.printStackTrace();
-                    } catch (IOException c) {
-                        c.printStackTrace();
-                    }
-                    message = message + EventString + "\n";
-                    try {
-                        FileOutputStream outputStream = openFileOutput("yourGames", MODE_PRIVATE);
-                        outputStream.write(message.getBytes());
-                        outputStream.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException o) {
-                        o.printStackTrace();
-                    }
-                    Intent i = new Intent(EventInfo.this, MainActivity.class);
-                    startActivity(i);
-                }
+                    }).create();
+                    myAlert.show();
+                } else if (!name.getText().toString().equals("")
+                        && peopleGoing.getText().toString().equals("")) {
+                    AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                    myAlert.setMessage("Please fill out the number of people going!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create();
+                    myAlert.show();
+                } else if (name.getText().toString().equals("")
+                        && !peopleGoing.getText().toString().equals("")) {
+                    AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                    myAlert.setMessage("Please fill out your name!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create();
+                    myAlert.show();
+                } else {
+                    mRef = new Firebase(test.getKey());
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            events joinEvent;
+                            joinEvent = dataSnapshot.getValue(events.class);
+                            joinEvent.addPersonGoing(name.getText().toString());
+                            Log.i("stuff", dataSnapshot.getValue().toString());
+                            mRef.setValue(joinEvent);
+                            String message = "";
+                            String EventString = "Event: " + test.getEventName() + "\nDate: " + test.getDate() + "\nTime: " + test.getTime() + "\nLocation: " + test.getLocation();
+                            try {
+                                FileInputStream fileInput = openFileInput("yourGames");
+                                InputStreamReader readString = new InputStreamReader(fileInput);
+                                BufferedReader bReader = new BufferedReader(readString);
+                                StringBuffer sBuffer = new StringBuffer();
+                                while ((message = bReader.readLine()) != null) {
+                                    sBuffer.append(message + "\n");
+                                }
+                                message = sBuffer.toString();
+                            } catch (FileNotFoundException o) {
+                                o.printStackTrace();
+                            } catch (IOException c) {
+                                c.printStackTrace();
+                            }
+                            message = message + EventString + "\n";
+                            try {
+                                FileOutputStream outputStream = openFileOutput("yourGames", MODE_PRIVATE);
+                                outputStream.write(message.getBytes());
+                                outputStream.close();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException o) {
+                                o.printStackTrace();
+                            }
+                            Intent i = new Intent(EventInfo.this, MainActivity.class);
+                            startActivity(i);
+                        }
 
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
                 }
-            });
+            }
         }
 
     }
