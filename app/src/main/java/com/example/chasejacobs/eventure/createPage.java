@@ -204,6 +204,11 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                 newEvent.setCreatorName(creatorsName.getText().toString());
                                 newEvent.setDate(date.getText().toString());
                                 newEvent.setPeopleLimit(Integer.parseInt(peopleLimit.getText().toString()));
+
+                                //// TODO: 7/14/16  add longitude and latitude to newEvent :D
+
+
+
                                 newEvent.setCategory(categorySelected);
                                 Log.i("HAPPENS","This happens, so it probably saves");
                                 mRef = new Firebase("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
