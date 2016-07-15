@@ -5,7 +5,7 @@ import com.firebase.client.Firebase;
 /**
  * This class implements the Firebase database and links it into the rest of the app.
  *
- * @Author Chase Jacobs
+ * @Author Cgit ase Jacobs
  */
 public class DatabaseF extends android.app.Application{
     @Override
