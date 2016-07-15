@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -36,7 +37,7 @@ import java.io.InputStreamReader;
 
 /**
  * Activity for displaying a certain event
- *
+ * <p/>
  * This activity is used to the corresponding event that the user clicked on
  *
  * @author Chase Jacobs, Luke Iannucci
@@ -73,8 +74,8 @@ public class EventInfo extends AppCompatActivity {
         test.setDate(bundle.getString("date"));
         lv = (ListView) findViewById(R.id.eventListView);
         String[] eventInfo = new String[8];
-        eventInfo[0] = "Event Name: "+ test.getEventName();
-        eventInfo[1] = "Creator Name: "+ test.getCreatorName();
+        eventInfo[0] = "Event Name: " + test.getEventName();
+        eventInfo[1] = "Creator Name: " + test.getCreatorName();
         eventInfo[2] = "Location: " + test.getLocation();
         eventInfo[3] = "Date: " + test.getDate();
         eventInfo[4] = "Time: " + test.getTime();
@@ -92,7 +93,7 @@ public class EventInfo extends AppCompatActivity {
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             createGPSErrorDialog();
         } else {
-            if(networkInfo != null) {
+            if (networkInfo != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                             && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -106,7 +107,7 @@ public class EventInfo extends AppCompatActivity {
         }
     }
 
-    protected void createGPSErrorDialog(){
+    protected void createGPSErrorDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("This application needs to acces your location. Please enable your GPS location.")
                 .setTitle("Unable to find your location")
@@ -149,7 +150,6 @@ public class EventInfo extends AppCompatActivity {
     /**
      * This function will display the error message if you are not connected to the internet.
      * It will give the user the option to connect and if the choose not to, it will quit the app.
-     *
      */
     protected void createNetErrorDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -175,20 +175,20 @@ public class EventInfo extends AppCompatActivity {
         alert.show();
     }
 
-    public void onBackButton(View a){
-        if(a.getId() == R.id.backButton){
+    public void onBackButton(View a) {
+        if (a.getId() == R.id.backButton) {
             Intent i = new Intent(this, SearchPage.class);
             startActivity(i);
         }
     }
 
-    public void joinEvent(View a){
+    public void joinEvent(View a) {
         connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
         getLocation();
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             createGPSErrorDialog();
-        } else if(networkInfo == null) {
+        } else if (networkInfo == null) {
             createNetErrorDialog();
         } else {
             if (myLoc != null) {
@@ -278,6 +278,8 @@ public class EventInfo extends AppCompatActivity {
                         }
                     });
                 }
+            } else {
+                Toast.makeText(this, "Finding Location", Toast.LENGTH_LONG).show();
             }
         }
 

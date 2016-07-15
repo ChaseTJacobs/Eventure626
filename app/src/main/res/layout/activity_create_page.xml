@@ -26,7 +26,7 @@
             android:layout_span="1"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/eventNameInput"
-            android:layout_alignEnd="@+id/description" />
+            android:layout_toStartOf="@+id/spinner" />
 
         <Spinner
             android:id="@+id/spinner"
@@ -81,8 +81,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Time"
-            android:id="@+id/time"
+            android:text="Description"
+            android:id="@+id/description"
             android:layout_column="0"
             android:layout_below="@+id/locationInput"
             android:layout_alignParentStart="true" />
@@ -90,11 +90,11 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/timeInput"
+            android:id="@+id/descriptionInput"
             android:layout_column="0"
             android:layout_span="17"
-            android:layout_below="@+id/time"
-            android:layout_alignStart="@+id/time"
+            android:layout_below="@+id/description"
+            android:layout_alignStart="@+id/description"
             android:layout_alignParentEnd="true" />
 
         <TextView
@@ -104,7 +104,7 @@
             android:text="Your Name"
             android:id="@+id/creatorName"
             android:layout_column="0"
-            android:layout_below="@+id/timeInput"
+            android:layout_below="@+id/descriptionInput"
             android:layout_alignParentStart="true" />
 
         <EditText
@@ -120,8 +120,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Description"
-            android:id="@+id/description"
+            android:text="Date"
+            android:id="@+id/date"
             android:layout_column="0"
             android:layout_below="@+id/creatorNameInput"
             android:layout_alignParentStart="true" />
@@ -129,31 +129,31 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/descriptionInput"
+            android:id="@+id/dateInput"
             android:layout_column="0"
             android:layout_span="17"
-            android:layout_below="@+id/description"
+            android:layout_below="@+id/date"
             android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignEnd="@+id/timeInput" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date"
-            android:id="@+id/date"
+            android:text="Time"
+            android:id="@+id/time1"
             android:layout_column="0"
-            android:layout_below="@+id/descriptionInput"
+            android:layout_below="@+id/dateInput"
             android:layout_alignParentStart="true" />
 
         <EditText
-            android:id="@+id/dateInput"
+            android:id="@+id/timeInput"
             android:layout_column="0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_span="17"
-            android:layout_below="@+id/date"
-            android:layout_alignStart="@+id/date"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignBottom="@+id/timeButton"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/timeButton" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -161,7 +161,7 @@
             android:text="People Limit"
             android:id="@+id/PeopleGoing"
             android:layout_column="0"
-            android:layout_below="@+id/dateInput"
+            android:layout_below="@+id/timeInput"
             android:layout_alignParentStart="true" />
 
         <EditText
@@ -183,6 +183,24 @@
             android:onClick="createEvent"
             android:layout_below="@+id/peopleLimitInput"
             android:layout_alignEnd="@+id/peopleLimitInput" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Time"
+            android:id="@+id/timeButton"
+            android:layout_below="@+id/time1"
+            android:layout_alignEnd="@+id/peopleLimitInput" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Date"
+            android:id="@+id/dateButton"
+            android:layout_above="@+id/time1"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/timeButton"
+            android:onClick="showDialog" />
 
 
     </RelativeLayout>
