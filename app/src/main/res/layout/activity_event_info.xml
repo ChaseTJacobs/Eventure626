@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.chasejacobs.eventure.EventInfo">
+    tools:context="com.example.chasejacobs.eventure.EventInfo"
+    android:background="#60b0e0f6">
 
     <Button
         android:layout_width="wrap_content"
@@ -22,33 +23,39 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/peopleGoing"
         android:layout_above="@+id/joinEvent"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="29dp"
-        android:layout_alignEnd="@+id/joinEvent" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Number of People Going"
-        android:id="@+id/textView2"
-        android:layout_above="@+id/editText2"
+        android:layout_alignEnd="@+id/joinEvent"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/userName"
-        android:layout_above="@+id/textView2"
+        android:layout_above="@+id/numPeopleGoingText"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/editText2" />
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Event Info"
+        android:id="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:id="@+id/backButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:onClick="onBackButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Name"
         android:id="@+id/name"
         android:layout_above="@+id/userName"
@@ -57,18 +64,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Event Info"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:text="Number of People Going"
+        android:id="@+id/numPeopleGoingText"
+        android:layout_above="@+id/peopleGoing"
+        android:layout_alignParentStart="true" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView2"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
+        android:id="@+id/eventListView"
+        android:layout_below="@+id/backButton"
+        android:layout_alignParentStart="true"
         android:layout_above="@+id/name" />
 
 </RelativeLayout>

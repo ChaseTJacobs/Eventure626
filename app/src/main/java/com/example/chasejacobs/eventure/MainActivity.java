@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,6 +41,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.lang.String;
+import java.lang.StringBuffer;
 
 /**
  * Activity for the main page
@@ -75,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         networkInfo = connMgr.getActiveNetworkInfo();
         yourEvents = new ArrayList<events>();
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        lv = (ListView) findViewById(R.id.listView);
+        lv = (ListView) findViewById(R.id.homeListView);
         loc = new MyLocListener();
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             createGPSErrorDialog();
@@ -149,23 +153,46 @@ public class MainActivity extends AppCompatActivity {
         listOfEvents.add(event3);
         listOfEvents.add(event4);
 
-        eventListStorage(listOfEvents);
+        //eventListStorage(listOfEvents);
     }
 
     protected void loadFiles(){
         Log.i("Yes", "Load files");
         String message = "";
-        testText = (TextView) findViewById(R.id.editTest);
 
         try{
             FileInputStream fileInput = openFileInput("yourGames");
             InputStreamReader readString = new InputStreamReader(fileInput);
             BufferedReader bReader = new BufferedReader(readString);
-            StringBuffer sBuffer = new StringBuffer();
-            while ((message=bReader.readLine()) != null){
-                sBuffer.append(message + "\n");
+            String eventInfo[] = new String [50];
+            for(int i = 0; i < eventInfo.length; i++){
+                eventInfo[i] = "";
             }
-            message = sBuffer.toString();
+            int index = 0;
+            int counter = 0;
+            String temp = new String();
+            while ((message=bReader.readLine()) != null){
+                temp = message.substring(0, 9);
+                if(!message.substring(0, 9).equals("Location:")) {
+                    eventInfo[index] += "\n" + message;
+                }
+                else {
+                    eventInfo[index] += "\n" + message;
+                    index++;
+                }
+            }
+            for (int i = 0; i < eventInfo.length; i++){
+                if(!eventInfo[i].equals("")){
+                    counter++;
+                }
+            }
+            String[] finalInfo = new String[counter];
+            for (int i = 0; i < finalInfo.length; i++){
+                finalInfo[i] = eventInfo[i];
+            }
+            adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, finalInfo);
+            lv.setAdapter(adapter);
+            lv.setTextFilterEnabled(true);
         }
         catch (FileNotFoundException o){
             o.printStackTrace();
@@ -173,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
         catch (IOException c){
             c.printStackTrace();
         }
-        testText.setText(message);
     }
 
     protected void createGPSErrorDialog(){
@@ -214,8 +240,7 @@ public class MainActivity extends AppCompatActivity {
             myLoc = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
             if (myLoc != null) {
-                TextView tv = (TextView) findViewById(R.id.gps);
-                tv.setText("Latitude: " + myLoc.getLatitude() + "\nLongitude: " + myLoc.getLongitude());
+                //do whatever
             } else {
                 Toast.makeText(this, "Finding Location", Toast.LENGTH_LONG).show();
             }
@@ -306,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
      * page. It makes sure you are connected to the internet before taking you there.
      *
      * @param a
-     */
+     *
     public void onButtonClickTest(View a) {
         if (a.getId() == R.id.eventInfo) {
             connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

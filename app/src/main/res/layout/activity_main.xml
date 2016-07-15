@@ -9,76 +9,44 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.chasejacobs.eventure.MainActivity"
     android:nestedScrollingEnabled="false"
-    android:onClick="unitTestDatabase">
+    android:onClick="unitTestDatabase"
+    android:background="#60b0e0f6">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next page"
+        android:text="Create an Event"
         android:id="@+id/testNext"
         android:onClick="onButtonClick"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/unitTestDatabase" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Text Database"
-        android:id="@+id/unitTestDatabase"
-        android:nestedScrollingEnabled="false"
-        android:onClick="unitTestDatabase"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/gps"
-        android:layout_marginStart="20dp" />
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/searchEvents" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search Local Events"
         android:id="@+id/searchEvents"
-        android:layout_above="@+id/testNext"
-        android:layout_centerHorizontal="true"
-        android:onClick="searchPage" />
+        android:onClick="searchPage"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/testNext" />
 
-    <Button
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Test Info"
-        android:id="@+id/eventInfo"
-        android:onClick="onButtonClickTest"
-        android:layout_above="@+id/searchEvents"
-        android:layout_toEndOf="@+id/searchEvents" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTest"
-        android:text="NothingYet"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/gps"
+        android:id="@+id/imageView"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/embed" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/searchEvents" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test List"
-        android:id="@+id/testList"
+        android:id="@+id/homeListView"
         android:layout_above="@+id/searchEvents"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="24dp"
-        android:onClick="testListDisplay" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageView" />
 
 
 </RelativeLayout>

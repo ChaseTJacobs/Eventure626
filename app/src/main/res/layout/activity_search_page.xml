@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.chasejacobs.eventure.SearchPage">
+    tools:context="com.example.chasejacobs.eventure.SearchPage"
+    android:background="#60b0e0f6">
 
     <Button
         android:layout_width="wrap_content"
@@ -36,7 +37,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="testView"
+        android:text="Search"
         android:id="@+id/testView"
         android:layout_above="@+id/spinnerSearch"
         android:layout_alignEnd="@+id/listResults"

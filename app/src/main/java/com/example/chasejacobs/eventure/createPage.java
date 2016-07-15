@@ -313,7 +313,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                 Log.i("HAPPENS","This happens, so it probably saves");
                                 mRef = new Firebase("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
                                 newEvent.setKey("https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
-                                String tempS = "https://eventure-8fca3.firebaseio.com/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()) + "\n";
+                                String EventString = "Event: " + newEvent.getEventName() + "\nDate: " + newEvent.getDate() + "\nTime: " + newEvent.getTime() +  "\nLocation: " + newEvent.getLocation();
                                 mRef.setValue(newEvent);
                                 mRef.child("peopleGoing").setValue(newEvent.getPeopleGoing());
                                 //read old file
@@ -332,7 +332,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                                     } catch (IOException c) {
                                         c.printStackTrace();
                                     }
-                                    message = message + tempS + "\n";
+                                    message = message + EventString + "\n";
                                     //write new file
                                     Log.i("Yes", "Load files");
                                     try {
@@ -399,7 +399,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                         myAlert.show();
                     } else {
                         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-                        myAlert.setMessage("Please enter the time in the following format:\nhh:mm AM or PM\nAnd the date in the following format:\nmm/dd/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        myAlert.setMessage("Please enter the time in the following format: hh:mm AM or PM\nAnd the date in the following format: mm/dd/yyyy").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();

@@ -148,6 +148,8 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                             bundle.putString("location", searchResults.get(position).getLocation());
                             bundle.putString("description", searchResults.get(position).getDescription());
                             bundle.putString("key", searchResults.get(position).getKey());
+                            bundle.putString("date", searchResults.get(position).getDate());
+                            bundle.putString("time", searchResults.get(position).getTime());
 
                             Intent i = new Intent(SearchPage.this, EventInfo.class);
                             i.putExtras(bundle);
