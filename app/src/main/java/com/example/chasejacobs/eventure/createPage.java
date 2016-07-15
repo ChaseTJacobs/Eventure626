@@ -1,7 +1,8 @@
 package com.example.chasejacobs.eventure;
 
-import android.*;
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,14 +21,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -35,7 +36,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Date;
 import java.util.Random;
 
 /**
@@ -67,7 +67,9 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
     LocationManager manager;
     MyLocListener loc;
     Location myLoc;
-
+    Button button;
+    int year, month, day;
+    static final int DIALOG_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,38 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
             createNetErrorDialog();
         }
 
+    }
+
+    public void showDialog(View v){
+        showDialogOnButtonClick();
+    }
+
+    public void showDialogOnButtonClick() {
+            button = (Button) findViewById(R.id.dateButton);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialog(DIALOG_ID);
+                }
+            });
+    }
+
+    private DatePickerDialog.OnDateSetListener dpickerListener = new DatePickerDialog.OnDateSetListener(){
+        @Override
+        public void onDateSet(DatePicker view, int yearX, int monthOfYear, int dayOfMonth){
+            year = yearX;
+            month = monthOfYear;
+            day = dayOfMonth;
+            Toast.makeText(createPage.this, month + "/" + day + "/" + year, Toast.LENGTH_LONG);
+        }
+    };
+
+    protected Dialog onCreateDialog(int id) {
+        if(id == DIALOG_ID){
+            return new DatePickerDialog(this, dpickerListener, year, month, day);
+        }
+        return null;
     }
     protected void createGPSErrorDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -212,10 +246,10 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
         if (a.getId() == R.id.createButton) {
             EditText eventName = (EditText) findViewById(R.id.eventNameInput);
             EditText location = (EditText) findViewById(R.id.locationInput);
-            EditText time = (EditText) findViewById(R.id.timeInput);
+            EditText time = (EditText) findViewById(R.id.descriptionInput);
             EditText creatorsName = (EditText) findViewById(R.id.creatorNameInput);
-            EditText description = (EditText) findViewById(R.id.descriptionInput);
-            EditText date = (EditText) findViewById(R.id.dateInput);
+            EditText description = (EditText) findViewById(R.id.dateInput);
+            EditText date = (EditText) findViewById(R.id.timeInput);
             EditText peopleLimit = (EditText) findViewById(R.id.peopleLimitInput);
             getLocation();
             connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
