@@ -12,6 +12,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -32,12 +34,6 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -58,6 +54,7 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
     private String categorySelected = new String();
     private static final String errorTag = "createPage";
     Firebase mRef;
+    Firebase hRef;
     private String filename = "yourGames";
     ConnectivityManager connMgr;
     NetworkInfo networkInfo;
@@ -341,45 +338,25 @@ public class createPage extends AppCompatActivity implements AdapterView.OnItemS
                             newEvent.setCreatorName(creatorsName.getText().toString());
                             newEvent.setDate(date.getText().toString());
                             newEvent.setPeopleLimit(Integer.parseInt(peopleLimit.getText().toString()));
-                            newEvent.setLatitude((long) myLoc.getLatitude());
-                            newEvent.setLongitute((long) myLoc.getLongitude());
+                            newEvent.setLatitude(Double.toString(myLoc.getLatitude()));
+                            newEvent.setLongitute(Double.toString(myLoc.getLongitude()));
                             newEvent.setCategory(categorySelected);
                             Log.i("HAPPENS", "This happens, so it probably saves");
                             mRef = new Firebase("https://eventure-8fca3.firebaseio.com/events/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
                             newEvent.setKey("https://eventure-8fca3.firebaseio.com/events/" + newEvent.getCategory() + Integer.toString(newEvent.getEventID()));
-                            String EventString = "Event: " + newEvent.getEventName() + "\nDate: " + newEvent.getDate() + "\nTime: " + newEvent.getTime() + "\nLocation: " + newEvent.getLocation();
+                            //String EventString = "Event: " + newEvent.getEventName() + "\nDate: " + newEvent.getDate() + "\nTime: " + newEvent.getTime() + "\nLocation: " + newEvent.getLocation();
                             mRef.setValue(newEvent);
                             mRef.child("peopleGoing").setValue(newEvent.getPeopleGoing());
                             //read old file
-                            String message = "";
-                            try {
-                                FileInputStream fileInput = openFileInput("yourGames");
-                                InputStreamReader readString = new InputStreamReader(fileInput);
-                                BufferedReader bReader = new BufferedReader(readString);
-                                StringBuffer sBuffer = new StringBuffer();
-                                while ((message = bReader.readLine()) != null) {
-                                    sBuffer.append(message + "\n");
-                                }
-                                message = sBuffer.toString();
-                            } catch (FileNotFoundException o) {
-                                o.printStackTrace();
-                            } catch (IOException c) {
-                                c.printStackTrace();
-                            }
-                            message = message + EventString + "\n";
-                            //write new file
-                            Log.i("Yes", "Load files");
-                            try {
-                                FileOutputStream outputStream = openFileOutput(filename, MODE_PRIVATE);
-                                outputStream.write(message.getBytes());
-                                outputStream.close();
-                                Intent i = new Intent(createPage.this, MainActivity.class);
-                                startActivity(i);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException o) {
-                                o.printStackTrace();
-                            }
+                            //String message = "";
+                            WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                            WifiInfo info = manager.getConnectionInfo();
+                            String address = info.getMacAddress();
+                            hRef = new Firebase("https://eventure-8fca3.firebaseio.com/address/" + address);
+                            hRef.child(Integer.toString(newEvent.getEventID())).setValue(newEvent.getKey());
+                            Intent i = new Intent(createPage.this, MainActivity.class);
+                            startActivity(i);
+
                         } catch (NumberFormatException e) {
                             AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
                             myAlert.setMessage("Please type in a number for people limit!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
