@@ -104,7 +104,11 @@ public class MainActivity extends AppCompatActivity {
             eventString[i] = "";
         }
         for (int i = 0; i < listSize; i++){
-            eventString[i] = eventList.get(i).getEventName() + "\n" + eventList.get(i).getTime() + "\n" + eventList.get(i).getLocation();
+            eventString[i] = "Event: " + eventList.get(i).getEventName()
+                    + "\nLocation: " + eventList.get(i).getLocation()
+                    + "\nDate: " + eventList.get(i).getDate()
+                    + "\nTime: " + eventList.get(i).getTime();
+
         }
 
         adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, eventString);
