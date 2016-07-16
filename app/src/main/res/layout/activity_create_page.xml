@@ -134,7 +134,10 @@
             android:layout_span="17"
             android:layout_below="@+id/date"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/dateButton" />
+            android:layout_toStartOf="@+id/dateButton"
+            android:enabled="true"
+            android:clickable="true"
+            android:editable="false" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -151,9 +154,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_span="17"
-            android:layout_alignBottom="@+id/timeButton"
+            android:layout_alignBottom="@+id/setTimeButton"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/timeButton" />
+            android:layout_toStartOf="@+id/setTimeButton"
+            android:enabled="true"
+            android:editable="false"
+            android:clickable="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -188,9 +194,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Set Time"
-            android:id="@+id/timeButton"
+            android:id="@+id/setTimeButton"
             android:layout_below="@+id/time1"
-            android:layout_alignEnd="@+id/peopleLimitInput" />
+            android:layout_alignEnd="@+id/peopleLimitInput"
+            android:onClick="showTimeDialog" />
 
         <Button
             android:layout_width="wrap_content"
