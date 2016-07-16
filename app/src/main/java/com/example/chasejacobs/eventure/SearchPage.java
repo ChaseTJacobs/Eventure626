@@ -137,6 +137,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
 
     public void unitTestLoadResults(View A){
         //getLocation();
+        //// TODO: 7/16/16 It crashes when this is called. 
         mRef = new Firebase("https://eventure-8fca3.firebaseio.com/events/");
         connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
@@ -159,6 +160,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Double longitude = myLoc.getLongitude();
                     Double latitude = myLoc.getLatitude();
+                    //// TODO: 7/16/16 This is where I need the location. 
                     final List<events> searchResults = new ArrayList<>();
                     for (DataSnapshot child : dataSnapshot.getChildren()){
                         if (child.getValue(events.class).getCategory().equals(categorySelected)){
