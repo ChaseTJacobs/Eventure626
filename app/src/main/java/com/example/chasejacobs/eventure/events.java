@@ -26,8 +26,8 @@ public class events {
     private String category;
     private String description;
     private int eventID;
-    private long latitude;
-    private long longitute;
+    private int latitude;
+    private int longitute;
     private String key;
 
     public events(){}
@@ -63,10 +63,10 @@ public class events {
     public void setEventID(int eventID) {
         this.eventID = eventID;
     }
-    public long getLatitude() {
+    public int getLatitude() {
         return latitude;
     }
-    public long getLongitute() {
+    public int getLongitute() {
         return longitute;
     }
     public String getKey() {
@@ -109,10 +109,10 @@ public class events {
     public int getEventID() {
         return eventID;
     }
-    public void setLatitude(long latitude) {
+    public void setLatitude(int latitude) {
         this.latitude = latitude;
     }
-    public void setLongitute(long longitute) {
+    public void setLongitute(int longitute) {
         this.longitute = longitute;
     }
     public void setKey(String key) {
