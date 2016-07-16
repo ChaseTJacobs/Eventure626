@@ -81,7 +81,47 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
         lv = (ListView) findViewById(R.id.listResults);
         connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        loc = new MyLocListener();
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            createGPSErrorDialog();
+        } else {
+            if (networkInfo != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.INTERNET}, 1);
+                    }
+                }
+            }
+        }
+        if (networkInfo == null) {
+            createNetErrorDialog();
+        }
+    }
 
+    protected void createGPSErrorDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This application needs to acces your location. Please enable your GPS location.")
+                .setTitle("Unable to find your location")
+                .setCancelable(false)
+                .setPositiveButton("Settings",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(i);
+                            }
+                        }
+                )
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SearchPage.this.finish();
+                            }
+                        }
+                );
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     /**
@@ -136,86 +176,94 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     }
 
     public void unitTestLoadResults(View A){
-        //getLocation();
+
         //// TODO: 7/16/16 It crashes when this is called. 
         mRef = new Firebase("https://eventure-8fca3.firebaseio.com/events/");
+        getLocation();
         connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
-        if (categorySelected.equals("Select Category")){
-            AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-            myAlert.setMessage("Please select a category!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).create();
-            myAlert.show();
-        }
-        else if(networkInfo == null){
+        if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            createGPSErrorDialog();
+        } else if(networkInfo == null){
             createNetErrorDialog();
         }
-        else{
-            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Double longitude = myLoc.getLongitude();
-                    Double latitude = myLoc.getLatitude();
-                    //// TODO: 7/16/16 This is where I need the location. 
-                    final List<events> searchResults = new ArrayList<>();
-                    for (DataSnapshot child : dataSnapshot.getChildren()){
-                        if (child.getValue(events.class).getCategory().equals(categorySelected)){
-                            Double tempLong = Double.parseDouble(child.getValue(events.class).getLongitute()) - longitude;
-                            Double tempLat = Double.parseDouble(child.getValue(events.class).getLatitude()) - latitude;
-                            Log.i("Long", tempLong.toString());
-                            Log.i("Lat", tempLat.toString());
-                            if (tempLong > -0.05 && tempLong < 0.05){
-                                if (tempLat > -0.05 && tempLat < 0.05){
+        else {
+            if (categorySelected.equals("Select Category")) {
+                AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+                myAlert.setMessage("Please select a category!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+                myAlert.show();
+            } else {
+                if (myLoc != null) {
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Double longitude = myLoc.getLongitude();
+                            Double latitude = myLoc.getLatitude();
+                            //// TODO: 7/16/16 This is where I need the location.
+                            final List<events> searchResults = new ArrayList<>();
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                if (child.getValue(events.class).getCategory().equals(categorySelected)) {
+                                    Double tempLong = Double.parseDouble(child.getValue(events.class).getLongitute()) - longitude;
+                                    Double tempLat = Double.parseDouble(child.getValue(events.class).getLatitude()) - latitude;
+                                    Log.i("Long", tempLong.toString());
+                                    Log.i("Lat", tempLat.toString());
+                                    if (tempLong > -0.05 && tempLong < 0.05) {
+                                        if (tempLat > -0.05 && tempLat < 0.05) {
+                                            searchResults.add(child.getValue(events.class));
+                                        }
+                                    }
                                     searchResults.add(child.getValue(events.class));
                                 }
+
                             }
-                            searchResults.add(child.getValue(events.class));
+                            final int listSize = searchResults.size();
+                            String[] eventString = new String[listSize];
+                            for (int i = 0; i < listSize; i++) {
+                                eventString[i] = "";
+                            }
+                            for (int i = 0; i < listSize; i++) {
+                                eventString[i] = searchResults.get(i).getEventName() + "\n" + searchResults.get(i).getTime() + "\n" + searchResults.get(i).getLocation();
+                            }
+
+                            adapter = new ArrayAdapter<String>(SearchPage.this, android.R.layout.simple_list_item_1, eventString);
+                            lv.setAdapter(adapter);
+                            lv.setTextFilterEnabled(true);
+
+                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("eventName", searchResults.get(position).getEventName());
+                                    bundle.putString("category", searchResults.get(position).getCategory());
+                                    bundle.putString("peopleLimit", String.valueOf(searchResults.get(position).getPeopleLimit()));
+                                    bundle.putString("eventID", String.valueOf(searchResults.get(position).getEventID()));
+                                    bundle.putString("creatorName", searchResults.get(position).getCreatorName());
+                                    bundle.putString("location", searchResults.get(position).getLocation());
+                                    bundle.putString("description", searchResults.get(position).getDescription());
+                                    bundle.putString("key", searchResults.get(position).getKey());
+                                    bundle.putString("date", searchResults.get(position).getDate());
+                                    bundle.putString("time", searchResults.get(position).getTime());
+
+                                    Intent i = new Intent(SearchPage.this, EventInfo.class);
+                                    i.putExtras(bundle);
+                                    startActivity(i);
+                                }
+                            });
                         }
 
-                    }
-                    final int listSize = searchResults.size();
-                    String[] eventString = new String[listSize];
-                    for (int i = 0; i < listSize; i++){
-                        eventString[i] = "";
-                    }
-                    for (int i = 0; i < listSize; i++){
-                        eventString[i] = searchResults.get(i).getEventName() + "\n" + searchResults.get(i).getTime() + "\n" + searchResults.get(i).getLocation();
-                    }
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
 
-                    adapter = new ArrayAdapter<String>(SearchPage.this, android.R.layout.simple_list_item_1, eventString);
-                    lv.setAdapter(adapter);
-                    lv.setTextFilterEnabled(true);
-
-                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                            Bundle bundle = new Bundle();
-                            bundle.putString("eventName", searchResults.get(position).getEventName());
-                            bundle.putString("category", searchResults.get(position).getCategory());
-                            bundle.putString("peopleLimit", String.valueOf(searchResults.get(position).getPeopleLimit()));
-                            bundle.putString("eventID", String.valueOf(searchResults.get(position).getEventID()));
-                            bundle.putString("creatorName", searchResults.get(position).getCreatorName());
-                            bundle.putString("location", searchResults.get(position).getLocation());
-                            bundle.putString("description", searchResults.get(position).getDescription());
-                            bundle.putString("key", searchResults.get(position).getKey());
-                            bundle.putString("date", searchResults.get(position).getDate());
-                            bundle.putString("time", searchResults.get(position).getTime());
-
-                            Intent i = new Intent(SearchPage.this, EventInfo.class);
-                            i.putExtras(bundle);
-                            startActivity(i);
                         }
                     });
+                }else {
+                    Toast.makeText(this, "Finding Location", Toast.LENGTH_LONG).show();
                 }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
+            }
         }
     }
 

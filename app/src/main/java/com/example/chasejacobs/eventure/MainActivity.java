@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
     Firebase mRef;
     Firebase hRef;
     TextView newText;
-    TextView testText;
-    private static final String errorMsg = "MainActivity";
     ConnectivityManager connMgr;
     NetworkInfo networkInfo;
     LocationManager manager;

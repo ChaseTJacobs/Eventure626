@@ -26,7 +26,8 @@
             android:layout_span="1"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/eventNameInput"
-            android:layout_toStartOf="@+id/spinner" />
+            android:layout_toStartOf="@+id/spinner"
+            android:layout_alignEnd="@+id/PeopleGoing" />
 
         <Spinner
             android:id="@+id/spinner"
