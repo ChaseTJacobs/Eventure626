@@ -217,7 +217,6 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
                                             searchResults.add(child.getValue(events.class));
                                         }
                                     }
-                                    searchResults.add(child.getValue(events.class));
                                 }
 
                             }
