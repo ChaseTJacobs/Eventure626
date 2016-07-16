@@ -1,12 +1,17 @@
 package com.example.chasejacobs.eventure;
 
+import android.*;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,6 +55,9 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     private ListView lv;
     ConnectivityManager connMgr;
     NetworkInfo networkInfo;
+    LocationManager manager;
+    MyLocListener loc;
+    Location myLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +136,7 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
     }
 
     public void unitTestLoadResults(View A){
+        //getLocation();
         mRef = new Firebase("https://eventure-8fca3.firebaseio.com/events/");
         connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
@@ -148,9 +157,20 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Double longitude = myLoc.getLongitude();
+                    Double latitude = myLoc.getLatitude();
                     final List<events> searchResults = new ArrayList<>();
                     for (DataSnapshot child : dataSnapshot.getChildren()){
                         if (child.getValue(events.class).getCategory().equals(categorySelected)){
+                            Double tempLong = Double.parseDouble(child.getValue(events.class).getLongitute()) - longitude;
+                            Double tempLat = Double.parseDouble(child.getValue(events.class).getLatitude()) - latitude;
+                            Log.i("Long", tempLong.toString());
+                            Log.i("Lat", tempLat.toString());
+                            if (tempLong > -0.05 && tempLong < 0.05){
+                                if (tempLat > -0.05 && tempLat < 0.05){
+                                    searchResults.add(child.getValue(events.class));
+                                }
+                            }
                             searchResults.add(child.getValue(events.class));
                         }
 
@@ -199,6 +219,22 @@ public class SearchPage extends AppCompatActivity implements AdapterView.OnItemS
 
     public void sendEvent(events temp){
 
+    }
+
+    public void getLocation() {
+        boolean requestedPermission = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.INTERNET}, 10);
+                requestedPermission = true;
+            }
+        }
+        if (requestedPermission == false) {
+            manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            myLoc = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc);
+        }
     }
 
 }
